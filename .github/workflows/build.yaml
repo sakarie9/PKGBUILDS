@@ -42,5 +42,5 @@ jobs:
           git config user.email "$COMMIT_AUTHOR_EMAIL"
           git add -v .
           git commit -m "Update by $GITHUB_REPOSITORY@$GITHUB_SHA" --allow-empty
-          git pull origin master --rebase=true # to avoid conflicts due to data races
-          git push origin master
+          git pull origin main --rebase=true # to avoid conflicts due to data races
+          git push origin main
