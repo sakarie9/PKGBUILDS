@@ -17,6 +17,7 @@ jobs:
       - name: Clone target repository
         uses: actions/checkout@v3
         with:
+          token: ${{ secrets.REPO_TOKEN }}
           repository: xzsk2/arch-repo
           path: pacman-repo
 
