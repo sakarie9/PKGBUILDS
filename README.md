@@ -4,7 +4,7 @@ PKGBUILDS and build scripts for ArchLinux
 
 ### Usage
 
-check [arch-repo](https://github.com/xzsk2/arch-repo)
+Check [arch-repo](https://github.com/xzsk2/arch-repo)
 
 ### Package lists
 
@@ -12,6 +12,6 @@ check [arch-repo](https://github.com/xzsk2/arch-repo)
 
 ### Thanks
 
-build scripts from [KSXGitHub/personal-pacman-packages](https://github.com/KSXGitHub/personal-pacman-packages)
+Build scripts from [KSXGitHub/personal-pacman-packages](https://github.com/KSXGitHub/personal-pacman-packages)
 
 
