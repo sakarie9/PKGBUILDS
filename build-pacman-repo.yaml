@@ -8,4 +8,5 @@ global-settings:
   allow-failure: false
   install-missing-dependencies: true
 members:
-  - directory: *
+  - directory: uuplugin-bin
+  - directory: go-musicfox-git
