@@ -1,0 +1,39 @@
+# Maintainer: Sakari <sk308269317@outlook.com>
+
+_pkgname="go-musicfox"
+pkgname="${_pkgname}-git"
+pkgver=1
+pkgrel=1
+pkgdesc='Command-line Netease Cloud Music written in Go.'
+url='https://github.com/go-musicfox/go-musicfox'
+license=('MIT')
+arch=('x86_64')
+provides=('musicfox')
+conflicts=('go-musicfox-bin' 'go-musicfox' 'musicfox')
+depends=('flac' 'alsa-lib')
+makedepends=('gcc-objc' 'go' 'git')
+source=("${_pkgname}::git+https://github.com/go-musicfox/go-musicfox.git")
+sha256sums=('SKIP')
+
+pkgver() {
+  cd "$_pkgname"
+  # cutting off 'foo-' prefix that presents in the git tag
+  git describe --tags --long --abbrev=7 | sed 's/^v//;s/\([^-]*-g\)/r\1/;s/-/./g'
+}
+
+build(){
+	cd "$_pkgname"
+	export GOFLAGS="-buildmode=pie -trimpath -ldflags=-linkmode=external"
+	export CGO_LDFLAGS="${LDFLAGS}"
+	export CGO_CFLAGS="${CFLAGS}"
+	export CGO_CPPFLAGS="${CPPFLAGS}"
+	export GOPATH=${srcdir}
+	go build -o ../musicfox -ldflags "-s -w -X go-musicfox/pkg/constants.AppVersion=v${pkgver}" cmd/musicfox.go
+}
+
+package() {
+	install -d "${pkgdir}/usr/bin"
+	install -d "${pkgdir}/usr/share/licenses/${pkgname}"
+	install -Dm755 "${srcdir}/musicfox" "${pkgdir}/usr/bin/musicfox"
+	install -Dm644 "${srcdir}/go-musicfox/LICENSE" "${pkgdir}/usr/share/licenses/${pkgname}"
+}

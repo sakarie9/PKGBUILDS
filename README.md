@@ -8,6 +8,7 @@ Check [arch-repo](https://github.com/xzsk2/arch-repo)
 
 ### Package lists
 
+- [go-musicfox-git](pkgbuilds/go-musicfox-git): [go-musicfox](https://github.com/go-musicfox/go-musicfox)
 - [uuplugin-bin](pkgbuilds/uuplugin-bin): UU 加速器插件
 
 ### Thanks
