@@ -29,7 +29,7 @@ jobs:
         uses: pacman-repo-builder/action@0.0.0-rc.64
         with:
           command: |
-            mkdir arch-repo/repo
+            mkdir -p arch-repo/repo
             build-pacman-repo build
 
       - name: Inspect changed failed build record
