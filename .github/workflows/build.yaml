@@ -15,8 +15,10 @@ jobs:
         run: sudo apt install python3 python3-yaml
 
       - name: Clone target repository
+        uses: actions/checkout@v3
+        repository: xzsk2/arch-repo
+        path: pacman-repo
         run: |
-          git clone git@github.com:xzsk2/arch-repo.git pacman-repo
           mkdir pacman-repo/repo
 
       - name: Inspect restored failed build record
@@ -38,8 +40,8 @@ jobs:
           COMMIT_AUTHOR_EMAIL: ${{ secrets.COMMIT_AUTHOR_EMAIL }}
         run: |
           cd pacman-repo
-          git config user.name "$COMMIT_AUTHOR_NAME"
-          git config user.email "$COMMIT_AUTHOR_EMAIL"
+          git config --global user.name "$COMMIT_AUTHOR_NAME"
+          git config --global user.email "$COMMIT_AUTHOR_EMAIL"
           git add -v .
           git commit -m "Update by $GITHUB_REPOSITORY@$GITHUB_SHA" --allow-empty
           git pull origin main --rebase=true # to avoid conflicts due to data races
