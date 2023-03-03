@@ -1,0 +1,11 @@
+global-settings:
+  container: pkgbuilds
+  repository: pacman-repo/repo/sakari-aur.db.tar.gz
+  dereference-database-symlinks: true
+  clean-after-build: true
+  packager: 'Sakari <sk308269317@outlook.com>'
+  check: enabled
+  allow-failure: false
+  install-missing-dependencies: true
+members:
+  - directory: uuplugin-bin
