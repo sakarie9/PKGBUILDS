@@ -8,4 +8,4 @@ global-settings:
   allow-failure: false
   install-missing-dependencies: true
 members:
-  - directory: uuplugin-bin
+  - directory: *
