@@ -16,7 +16,7 @@ jobs:
 
       - name: Clone target repository
         run: |
-          git clone https://github.com/xzsk2/arch-repo.git pacman-repo
+          git clone git@github.com:xzsk2/arch-repo.git pacman-repo
           mkdir pacman-repo/repo
 
       - name: Inspect restored failed build record
