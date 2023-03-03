@@ -7,7 +7,7 @@ process_pkgbuild() {
   folder=$(echo "${source[0]}" | awk -F'[:]' '{print $1}')
 
   if [ -n "$url" ]; then
-    git clone "$url" "$folder"
+    git clone "$url" "$folder-tmp"
   else
     echo "No git URL found in source variable."
   fi
