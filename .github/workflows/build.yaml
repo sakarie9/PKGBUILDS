@@ -19,29 +19,29 @@ jobs:
         with:
           token: ${{ secrets.REPO_TOKEN }}
           repository: xzsk2/arch-repo
-          path: pacman-repo
+          path: arch-repo
 
       - name: Inspect restored failed build record
         continue-on-error: true
-        run: cat pacman-repo/failed-build-records/personal-pacman-packages.yaml
+        run: cat arch-repo/failed-build-records/personal-pacman-packages.yaml
 
       - name: Build pacman packages
         uses: pacman-repo-builder/action@0.0.0-rc.64
         with:
           command: |
-            mkdir pacman-repo/repo
+            mkdir arch-repo/repo
             build-pacman-repo build
 
       - name: Inspect changed failed build record
         continue-on-error: true
-        run: cat pacman-repo/failed-build-records/personal-pacman-packages.yaml
+        run: cat arch-repo/failed-build-records/personal-pacman-packages.yaml
 
       - name: Upload packages
         env:
           COMMIT_AUTHOR_NAME: ${{ secrets.COMMIT_AUTHOR_NAME }}
           COMMIT_AUTHOR_EMAIL: ${{ secrets.COMMIT_AUTHOR_EMAIL }}
         run: |
-          cd pacman-repo
+          cd arch-repo
           git config --global user.name "$COMMIT_AUTHOR_NAME"
           git config --global user.email "$COMMIT_AUTHOR_EMAIL"
           git add -v .
