@@ -8,7 +8,5 @@ global-settings:
   allow-failure: true
   install-missing-dependencies: true
   arch-filter: [x86_64]
-members:
-  - directory: uuplugin-bin
-  - directory: go-musicfox-git
-  - directory: hyprland-opti-git
+aur-package-names:
+  - libdisplay-info
