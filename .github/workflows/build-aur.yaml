@@ -26,9 +26,6 @@ jobs:
           repository: xzsk2/arch-repo
           path: arch-repo
 
-      - name: Preprocess PKGBUILDs
-        run: ./git-pkgver-update.sh
-
       - name: Inspect restored failed build record
         continue-on-error: true
         run: |
