@@ -12,4 +12,4 @@ members:
   - directory: uuplugin-bin
   - directory: go-musicfox-git
   - directory: hyprland-opti-git
-    pacman: yay
+    pacman: paru
