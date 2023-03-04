@@ -40,6 +40,7 @@ jobs:
         with:
           command: |
             mkdir -p arch-repo/repo
+            pacman -Sy
             build-pacman-repo build
 
       - name: Inspect changed failed build record
