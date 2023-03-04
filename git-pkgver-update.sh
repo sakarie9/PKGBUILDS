@@ -8,14 +8,13 @@ process_pkgbuild() {
 
   if [ -n "$url" ]; then
     git clone "$url" "$_pkgname"
+    sed -i "s/pkgver=.*/pkgver=$(pkgver)/g" PKGBUILD
+    rm -rf $_pkgname
+    cd ../..
   else
     echo "No git URL found in source variable."
+    cd ..
   fi
-
-  sed -i "s/pkgver=.*/pkgver=$(pkgver)/g" PKGBUILD
-
-  rm -rf $_pkgname
-  cd ../..
 }
 
 for dir in $(find "pkgbuilds" -type d -name "*-git"); do
