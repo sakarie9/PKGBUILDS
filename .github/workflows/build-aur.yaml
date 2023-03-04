@@ -41,7 +41,7 @@ jobs:
         uses: pacman-repo-builder/action@0.0.0-rc.64
         with:
           command: |
-            pacman -Sy
+            pacman -Sy --noconfirm archlinux-keyring
             build-pacman-repo build
 
       - name: Inspect changed failed build record

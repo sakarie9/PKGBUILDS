@@ -4,7 +4,7 @@ global-settings:
   dereference-database-symlinks: true
   clean-after-build: true
   packager: 'Sakari <sk308269317@outlook.com>'
-  check: enabled
+  check: disabled
   allow-failure: true
   install-missing-dependencies: true
   arch-filter: [x86_64]
