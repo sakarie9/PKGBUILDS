@@ -41,7 +41,9 @@ jobs:
         uses: pacman-repo-builder/action@0.0.0-rc.64
         with:
           command: |
-            pacman -Sy --noconfirm archlinux-keyring
+            pacman -Sy
+            # for libdisplay-info
+            gpg --recv-keys 0FDE7BE0E88F5E48
             build-pacman-repo build
 
       - name: Inspect changed failed build record
