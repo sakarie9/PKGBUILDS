@@ -7,6 +7,7 @@ global-settings:
   check: enabled
   allow-failure: false
   install-missing-dependencies: true
+  arch-filter: [x86_64]
 members:
   - directory: uuplugin-bin
   - directory: go-musicfox-git
