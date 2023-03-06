@@ -34,10 +34,10 @@ jobs:
         with:
           command: |
             (
-              echo ''
-              echo '[sakari-aur]'
-              echo 'SigLevel = Optional'
-              echo 'Server = https://raw.github.com/xzsk2/arch-repo/main/repo'
+              # echo ''
+              # echo '[sakari-aur]'
+              # echo 'SigLevel = Optional'
+              # echo 'Server = https://raw.github.com/xzsk2/arch-repo/main/repo'
               echo ''
               echo '[archlinuxcn]'
               echo 'Server = https://mirrors.xtom.hk/archlinuxcn/$arch'
