@@ -22,12 +22,6 @@ jobs:
           repository: xzsk2/arch-repo
           path: arch-repo
 
-      - name: Inspect restored failed build record
-        continue-on-error: true
-        run: |
-          mkdir -p arch-repo/failed-build-records
-          cat arch-repo/failed-build-records/personal-pacman-packages.yaml
-
       - name: Init AUR Builder
         uses: pacman-repo-builder/action@0.0.0-rc.64
         with:
@@ -45,10 +39,6 @@ jobs:
             # for libdisplay-info
             gpg --recv-keys 0FDE7BE0E88F5E48
             build-pacman-repo build
-
-      - name: Inspect changed failed build record
-        continue-on-error: true
-        run: cat arch-repo/failed-build-records/personal-pacman-packages.yaml
 
       - name: Upload packages
         env:

@@ -40,7 +40,7 @@ jobs:
               echo 'Server = https://raw.github.com/xzsk2/arch-repo/main/repo'
               echo ''
               echo '[archlinuxcn]'
-              echo 'Server = https://repo.archlinuxcn.org/$arch'
+              echo 'Server = https://mirrors.tuna.tsinghua.edu.cn/archlinuxcn/$arch'
             ) >> /etc/pacman.conf
             pacman -Sy
             build-pacman-repo build
