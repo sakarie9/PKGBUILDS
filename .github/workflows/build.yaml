@@ -40,7 +40,7 @@ jobs:
               echo 'Server = https://raw.github.com/xzsk2/arch-repo/main/repo'
               echo ''
               echo '[archlinuxcn]'
-              echo 'Server = https://mirrors.tuna.tsinghua.edu.cn/archlinuxcn/$arch'
+              echo 'Server = https://mirrors.xtom.hk/archlinuxcn/$arch'
             ) >> /etc/pacman.conf
             pacman-key --init
             pacman -Sy --noconfirm archlinuxcn-keyring
