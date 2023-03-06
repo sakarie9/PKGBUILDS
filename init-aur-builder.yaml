@@ -9,4 +9,3 @@ global-settings:
   install-missing-dependencies: true
   arch-filter: [x86_64]
 aur-package-names:
-  - libdisplay-info

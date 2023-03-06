@@ -36,7 +36,9 @@ depends=(
 	seatd
 	vulkan-icd-loader
 	vulkan-validation-layers
-	xorg-xwayland)
+	xorg-xwayland
+	libliftoff
+	libdisplay-info-git)
 makedepends=(
 	git
 	cmake
@@ -46,14 +48,14 @@ makedepends=(
 	meson
 	vulkan-headers
 	wayland-protocols
-	xorgproto
-	libliftoff
-	libdisplay-info)
-source=("${_pkgname}::git+https://github.com/hyprwm/Hyprland.git")
+	xorgproto)
+source=("${_pkgname}::git+https://github.com/hyprwm/Hyprland.git"
+	"opti.patch")
 conflicts=("${_pkgname}"
 	hyprland-git)
 provides=(hyprland)
-sha256sums=('SKIP')
+sha256sums=('SKIP'
+			'SKIP')
 options=(!makeflags !buildflags !strip)
 
 pkgver() {
