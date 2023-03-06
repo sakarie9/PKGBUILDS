@@ -37,7 +37,7 @@ jobs:
           command: |
             pacman -Sy
             # for libdisplay-info
-            gpg --recv-keys 0FDE7BE0E88F5E48
+            # gpg --recv-keys 0FDE7BE0E88F5E48
             build-pacman-repo build
 
       - name: Upload packages

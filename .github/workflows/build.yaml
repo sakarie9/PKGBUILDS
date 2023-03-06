@@ -42,7 +42,7 @@ jobs:
               echo '[archlinuxcn]'
               echo 'Server = https://mirrors.tuna.tsinghua.edu.cn/archlinuxcn/$arch'
             ) >> /etc/pacman.conf
-            pacman -Sy
+            pacman -Sy archlinuxcn-keyring
             build-pacman-repo build
 
       - name: Upload packages
