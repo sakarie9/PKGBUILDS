@@ -1,5 +1,6 @@
 # Maintainer: Eric Engestrom <aur [at] engestrom [dot] ch>
 
+_pkgname=libdisplay-info
 pkgname=libdisplay-info-git
 pkgver=1
 pkgrel=1
@@ -15,7 +16,7 @@ conflicts=(libdisplay-info)
 provides=(libdisplay-info)
 
 pkgver() {
-  git -C libdisplay-info describe --tags --abbrev=10 | sed 's/^v//; s/-/+/; s/-/./'
+  git -C $_pkgname describe --tags --abbrev=10 | sed 's/^v//; s/-/+/; s/-/./'
 }
 
 build() {
