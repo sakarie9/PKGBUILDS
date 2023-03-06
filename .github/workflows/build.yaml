@@ -42,6 +42,7 @@ jobs:
               echo '[archlinuxcn]'
               echo 'Server = https://mirrors.tuna.tsinghua.edu.cn/archlinuxcn/$arch'
             ) >> /etc/pacman.conf
+            pacman-key --init
             pacman -Sy --noconfirm archlinuxcn-keyring
             build-pacman-repo build
 
