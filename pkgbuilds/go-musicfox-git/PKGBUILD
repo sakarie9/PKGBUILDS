@@ -16,7 +16,7 @@ source=("${_pkgname}::git+https://github.com/go-musicfox/go-musicfox.git")
 sha256sums=('SKIP')
 
 pkgver() {
-  cd "$pkgname"
+  cd "$_pkgname"
   printf "r%s.%s" "$(git rev-list --count HEAD)" "$(git rev-parse --short=7 HEAD)"
 }
 
