@@ -3,13 +3,13 @@
 _pkgname="hyprland"
 pkgname="${_pkgname}-opti-git"
 pkgver=1
-pkgrel=2
+pkgrel=1
 pkgdesc="A dynamic tiling Wayland compositor based on wlroots that doesn't sacrifice on its looks."
 arch=(any)
 url="https://github.com/hyprwm/Hyprland"
 license=('BSD')
-depends=(cairo pango seatd libdisplay-info-git)
-makedepends=(git cmake ninja wayland-protocols)
+depends=(cairo pango seatd libxkbcommon libinput libxcb xcb-util-wm wayland xorg-xwayland libliftoff libdisplay-info-git)
+makedepends=(git cmake ninja meson wayland-protocols)
 source=("${_pkgname}::git+https://github.com/hyprwm/Hyprland.git"
 	"opti.patch")
 conflicts=("${_pkgname}"
