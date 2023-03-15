@@ -13,4 +13,3 @@ members:
   - directory: go-musicfox-git
   - directory: hyprland-opti-git
   - directory: libdisplay-info-git
-  - directory: xdg-desktop-portal-hyprland-git
