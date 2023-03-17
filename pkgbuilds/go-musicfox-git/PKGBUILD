@@ -32,7 +32,7 @@ build(){
 
 package() {
 	install -d "${pkgdir}/usr/bin"
-	install -d "${pkgdir}/usr/share/licenses/${pkgname}"
+	install -d "${pkgdir}/usr/share/licenses/${_pkgname}"
 	install -Dm755 "${srcdir}/musicfox" "${pkgdir}/usr/bin/musicfox"
-	install -Dm644 "${srcdir}/go-musicfox/LICENSE" "${pkgdir}/usr/share/licenses/${pkgname}"
+	install -Dm644 "${srcdir}/go-musicfox/LICENSE" "${pkgdir}/usr/share/licenses/${_pkgname}"
 }
