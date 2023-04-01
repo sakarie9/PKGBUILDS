@@ -16,23 +16,18 @@ source=("${_pkgname}::git+https://github.com/go-musicfox/go-musicfox.git")
 sha256sums=('SKIP')
 
 pkgver() {
-  cd "$_pkgname"
-  printf "r%s.%s" "$(git rev-list --count HEAD)" "$(git rev-parse --short=7 HEAD)"
+	cd "$_pkgname"
+	printf "r%s.%s" "$(git rev-list --count HEAD)" "$(git rev-parse --short=7 HEAD)"
 }
 
-build(){
-	cd "$_pkgname"
-	export GOFLAGS="-buildmode=pie -trimpath -ldflags=-linkmode=external"
-	export CGO_LDFLAGS="${LDFLAGS}"
-	export CGO_CFLAGS="${CFLAGS}"
-	export CGO_CPPFLAGS="${CPPFLAGS}"
-	export GOPATH=${srcdir}
-	go build -o ../musicfox -ldflags "-s -w -X go-musicfox/pkg/constants.AppVersion=v${pkgver}" cmd/musicfox.go
+build() {
+	cd "${srcdir}/${_pkgname}"
+	make
 }
 
 package() {
 	install -d "${pkgdir}/usr/bin"
 	install -d "${pkgdir}/usr/share/licenses/${_pkgname}"
-	install -Dm755 "${srcdir}/musicfox" "${pkgdir}/usr/bin/musicfox"
-	install -Dm644 "${srcdir}/go-musicfox/LICENSE" "${pkgdir}/usr/share/licenses/${_pkgname}"
+	install -Dm755 "${srcdir}/${_pkgname}/bin/musicfox" "${pkgdir}/usr/bin/musicfox"
+	install -Dm644 "${srcdir}/${_pkgname}/LICENSE" "${pkgdir}/usr/share/licenses/${_pkgname}"
 }
