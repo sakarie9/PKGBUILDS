@@ -22,7 +22,7 @@ pkgver() {
 
 build() {
 	cd "${srcdir}/${_pkgname}"
-	make
+	GOAMD64=v3 make
 }
 
 package() {
