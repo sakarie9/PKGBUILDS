@@ -4,10 +4,23 @@ process_pkgbuild() {
   cd $1
   source PKGBUILD
 
-  url=$(echo "${source[0]}" | grep "git+" | cut -d '+' -f 2)
+  if declare -p "$source" &>/dev/null; then
+    eval "_source=\${${source}[0]}"
+  else
+    _source="${source}"
+  fi
+
+  echo $_source
+
+  url=$(echo "${source}" | cut -d '+' -f 2 | cut -d '#' -f 1)
+  branch=$(echo "${source}" | grep 'branch' | cut -d '#' -f 2 | cut -d '=' -f 2)
 
   if [ -n "$url" ]; then
-    git clone "$url" "$_pkgname"
+    if [ -n "$branch" ]; then
+      git clone "$url" "$_pkgname" -b "$branch"
+    else
+      git clone "$url" "$_pkgname"
+    fi
     sed -i "s/pkgver=.*/pkgver=$(pkgver)/g" PKGBUILD
     rm -rf $_pkgname
     cd ../..
