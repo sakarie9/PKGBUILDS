@@ -4,7 +4,7 @@
 _pkgname="hyprland"
 pkgname="${_pkgname}-opti-git"
 pkgver=1
-pkgrel=3
+pkgrel=1
 pkgdesc="A dynamic tiling Wayland compositor based on wlroots that doesn't sacrifice on its looks."
 arch=(x86_64)
 url="https://github.com/hyprwm/Hyprland"
