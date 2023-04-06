@@ -28,9 +28,6 @@ jobs:
           repository: xzsk2/arch-repo
           path: arch-repo
 
-      - name: Preprocess PKGBUILDs
-        run: ./git-pkgver-update.sh
-
       - name: Build pacman packages
         uses: pacman-repo-builder/action@0.0.0-rc.64
         with:
@@ -48,6 +45,7 @@ jobs:
             # pacman -Sy --noconfirm archlinuxcn-keyring
             pacman -Sy
             mkdir -p arch-repo/repo
+            ./git-pkgver-update.sh
             build-pacman-repo build
 
       - name: Upload packages
