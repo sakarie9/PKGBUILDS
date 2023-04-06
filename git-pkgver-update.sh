@@ -4,6 +4,7 @@ process_pkgbuild() {
   cd $1
   makepkg -o -d
   find . -maxdepth 1 ! -name PKGBUILD ! -name "." -exec rm -rf {} \;
+  cd ../..
 }
 
 for dir in $(find "pkgbuilds" -type d -name "*-git"); do
