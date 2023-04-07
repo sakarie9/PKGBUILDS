@@ -48,6 +48,9 @@ jobs:
             ./git-pkgver-update.sh
             build-pacman-repo build
 
+      - name: Cleanup packages
+        run: ./package-cleanup.sh sakari-aur arch-repo/repo
+
       - name: Upload packages
         env:
           COMMIT_AUTHOR_NAME: ${{ secrets.COMMIT_AUTHOR_NAME }}
