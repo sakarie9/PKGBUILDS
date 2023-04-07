@@ -59,7 +59,15 @@ jobs:
           cd arch-repo
           git config --global user.name "$COMMIT_AUTHOR_NAME"
           git config --global user.email "$COMMIT_AUTHOR_EMAIL"
-          git add -v .
-          git diff-index --quiet HEAD || git commit -m "Update by $GITHUB_REPOSITORY@$GITHUB_SHA"
-          git pull origin main --rebase=true # to avoid conflicts due to data races
-          git push origin main
+
+          # Fresh commit
+          git add -vA
+          if git diff-index --quiet HEAD; then
+            echo "No changes to commit."
+          else
+            git checkout --orphan temp_branch
+            git commit -m "Update by $GITHUB_REPOSITORY@$GITHUB_SHA" 
+            git branch -D main # delete main branch 
+            git branch -m main
+            git push origin main --force
+          fi
