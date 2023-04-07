@@ -60,14 +60,20 @@ jobs:
           git config --global user.name "$COMMIT_AUTHOR_NAME"
           git config --global user.email "$COMMIT_AUTHOR_EMAIL"
 
-          # Fresh commit
+          # # Fresh commit
+          # git add -vA
+          # if git diff-index --quiet HEAD; then
+          #   echo "No changes to commit."
+          # else
+          #   git checkout --orphan temp_branch
+          #   git commit -m "Update by $GITHUB_REPOSITORY@$GITHUB_SHA" 
+          #   git branch -D main # delete main branch 
+          #   git branch -m main
+          #   git push origin main --force
+          # fi
+
+          # Normal commit
           git add -vA
-          if git diff-index --quiet HEAD; then
-            echo "No changes to commit."
-          else
-            git checkout --orphan temp_branch
-            git commit -m "Update by $GITHUB_REPOSITORY@$GITHUB_SHA" 
-            git branch -D main # delete main branch 
-            git branch -m main
-            git push origin main --force
-          fi
+          git diff-index --quiet HEAD || git commit -m "Update by $GITHUB_REPOSITORY@$GITHUB_SHA"
+          git push origin main
+
