@@ -1,5 +1,7 @@
 #!/bin/bash
 
+# Orphan a package, delete it and clean db file
+
 set -e
 
 REPO_NAME=$1 # sakari-aur
