@@ -4,7 +4,7 @@
 _pkgname="hyprland"
 pkgname="${_pkgname}-opti-git"
 pkgver=1
-pkgrel=1
+pkgrel=2
 pkgdesc="A dynamic tiling Wayland compositor based on wlroots that doesn't sacrifice on its looks."
 arch=(x86_64)
 url="https://github.com/hyprwm/Hyprland"
@@ -27,7 +27,7 @@ depends=(
 	seatd
 	vulkan-icd-loader
 	xorg-xwayland
-	libdisplay-info-git
+	libdisplay-info
 )
 makedepends=(
 	git
