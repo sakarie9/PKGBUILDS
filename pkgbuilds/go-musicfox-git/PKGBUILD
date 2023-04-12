@@ -4,7 +4,7 @@ _pkgname="go-musicfox"
 pkgname="${_pkgname}-git"
 pkgver=1
 pkgrel=1
-_branchver='3.8.0'
+_branchver='4.0.1'
 pkgdesc='Command-line Netease Cloud Music written in Go.'
 url='https://github.com/go-musicfox/go-musicfox'
 license=('MIT')
@@ -12,8 +12,9 @@ arch=('x86_64')
 provides=('musicfox')
 conflicts=('go-musicfox-bin' 'go-musicfox' 'musicfox')
 depends=('flac' 'alsa-lib')
-makedepends=('gcc-objc' 'go' 'git')
-source=("${_pkgname}::git+https://github.com/go-musicfox/go-musicfox.git#branch=feature/v${_branchver}")
+makedepends=('go' 'git')
+# source=("${_pkgname}::git+https://github.com/go-musicfox/go-musicfox.git#branch=feature/v${_branchver}")
+source=("${_pkgname}::git+https://github.com/go-musicfox/go-musicfox.git")
 sha256sums=('SKIP')
 
 
