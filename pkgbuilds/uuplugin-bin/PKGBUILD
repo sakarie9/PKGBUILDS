@@ -12,7 +12,7 @@ source=(
 	"https://uu.gdl.netease.com/uuplugin/steam-deck-plugin-x86_64/v${pkgver}/uu.tar.gz"
 	'uuplugin.service')
 md5sums=(
-	'00375dfb12ea98006c2d11446193bdf7'
+	'24471cebc26cfc151442d8677acd164c'
 	'SKIP')
 
 package() {
