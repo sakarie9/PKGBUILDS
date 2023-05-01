@@ -1,7 +1,7 @@
 # Maintainer: Sakari <sk308269317@outlook.com>
 
 pkgname=uuplugin-bin
-pkgver=3.10.6
+pkgver=3.13.4
 pkgrel=1
 pkgdesc="UU Plugin for Linux"
 arch=('x86_64')
