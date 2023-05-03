@@ -10,3 +10,4 @@ global-settings:
   arch-filter: [x86_64]
 aur-package-names:
   - clash-meta
+  - dae
