@@ -28,17 +28,22 @@ jobs:
           command: |
             mkdir -p arch-repo/repo
             rm build-pacman-repo.yaml
+            mkdir -p aur-pkgbuilds
             build-pacman-repo init-aur-builder
             cat build-pacman-repo.yaml
+
+      - name: Patch packages
+        run: ./package-cleanup.sh
 
       - name: Build pacman packages
         uses: pacman-repo-builder/action@0.0.0-rc.64
         with:
           command: |
             pacman -Sy
-            # for libdisplay-info
-            # gpg --recv-keys 0FDE7BE0E88F5E48
             build-pacman-repo build
+
+      - name: Cleanup packages
+        run: ./package-cleanup.sh sakari-aur arch-repo/repo
 
       - name: Upload packages
         env:
@@ -48,7 +53,20 @@ jobs:
           cd arch-repo
           git config --global user.name "$COMMIT_AUTHOR_NAME"
           git config --global user.email "$COMMIT_AUTHOR_EMAIL"
-          git add -v .
+
+          # # Fresh commit
+          # git add -vA
+          # if git diff-index --quiet HEAD; then
+          #   echo "No changes to commit."
+          # else
+          #   git checkout --orphan temp_branch
+          #   git commit -m "Update by $GITHUB_REPOSITORY@$GITHUB_SHA" 
+          #   git branch -D main # delete main branch 
+          #   git branch -m main
+          #   git push origin main --force
+          # fi
+
+          # Normal commit
+          git add -vA
           git diff-index --quiet HEAD || git commit -m "Update by $GITHUB_REPOSITORY@$GITHUB_SHA"
-          git pull origin main --rebase=true # to avoid conflicts due to data races
           git push origin main

@@ -1,5 +1,5 @@
 global-settings:
-  container: pkgbuilds
+  container: aur-pkgbuilds
   repository: arch-repo/repo/sakari-aur.db.tar.gz
   dereference-database-symlinks: true
   clean-after-build: true
