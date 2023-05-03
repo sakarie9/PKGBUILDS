@@ -40,6 +40,7 @@ jobs:
 
       - name: Patch packages
         run: |
+          chmod -R 755 aur-pkgbuilds
           chmod -R +x aur-patches
           ./init-aur-patcher.sh
 
