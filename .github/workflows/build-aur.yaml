@@ -39,7 +39,9 @@ jobs:
             cat build-pacman-repo.yaml
 
       - name: Patch packages
-        run: ./init-aur-patcher.sh
+        run: |
+          chmod -R +x aur-patches
+          ./init-aur-patcher.sh
 
       - name: Build pacman packages
         uses: pacman-repo-builder/action@0.0.0-rc.64
