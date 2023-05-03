@@ -11,3 +11,5 @@ global-settings:
 aur-package-names:
   - clash-meta
   - dae
+  - dae-geoip-v2raycompat
+  - dae-geosite-v2raycompat
