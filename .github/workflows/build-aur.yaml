@@ -3,6 +3,11 @@ name: build aur
 on:
   schedule:
     - cron:  '00 20 * * *'
+  push:
+    paths:
+      - 'aur-patches/**'
+      - 'init-aur-builder.yaml'
+      - 'init-aur-patcher.sh'
   workflow_dispatch:
 
 jobs:
