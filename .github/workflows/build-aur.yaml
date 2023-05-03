@@ -41,6 +41,10 @@ jobs:
 
       - name: Patch packages
         run: |
+          ls -l .
+          ls -l aur-patches
+          ls -l aur-pkgbuilds
+          ls -l aur-pkgbuilds/clash-meta
           chmod -R +x aur-patches
           ./init-aur-patcher.sh
 
