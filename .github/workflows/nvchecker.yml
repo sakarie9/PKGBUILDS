@@ -5,8 +5,8 @@ on:
   push:
     branches:
       - main
-  schedule:
-    - cron: "0 */12 * * *"
+  # schedule:
+  #   - cron: "0 */12 * * *"
 
 env:
   REGISTRY: ghcr.io
@@ -18,14 +18,10 @@ jobs:
     runs-on: ubuntu-latest
     outputs:
       matrix: ${{ steps.set-matrix.outputs.matrix }}
-    container:
-      image: docker://martynas/archlinux:latest
 
     steps:
       - name: Set environment variables
         run: |
-          sudo chown -R build /github/home
-
           echo "LOG_FILE=nvchecker_$(date +'%Y-%m-%d_%H-%M-%S').log" >> $GITHUB_ENV
 
       - uses: actions/checkout@v3
