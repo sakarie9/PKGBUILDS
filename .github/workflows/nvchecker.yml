@@ -75,7 +75,7 @@ jobs:
     needs: check-new-versions
     strategy:
       matrix:
-        packages: ${{fromJson(needs.check-new-versions.outputs.matrix)}}
+        packages: ${{needs.check-new-versions.outputs.matrix}}
     runs-on: ubuntu-latest
     container:
       image: docker://martynas/archlinux:latest
