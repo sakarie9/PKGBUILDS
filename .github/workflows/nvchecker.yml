@@ -36,7 +36,9 @@ jobs:
           #nvcmp --file nvchecker/config.toml > result.tmp
           nvcmp -c nvchecker/config.toml -j > result.json
 
-          echo "::set-output name=matrix::$(cat result.json)"
+          echo "{matrix}={$(cat result.json)}" >> $GITHUB_OUTPUT
+
+          echo ${{needs.check-new-versions.outputs.matrix}}
 
           # nvtake --file nvchecker/config.toml --all
 
@@ -71,12 +73,12 @@ jobs:
     needs: check-new-versions
     strategy:
       matrix:
-        version: ${{fromJson(needs.check-new-versions.outputs.matrix)}}
+        packages: ${{fromJson(needs.check-new-versions.outputs.matrix)}}
     runs-on: ubuntu-latest
     container:
       image: docker://martynas/archlinux:latest
     steps:
       - name: Start Building Packages
         run: |
-          echo ${{ matrix.name }}
+          echo ${{ matrix.packages.name }}
           
