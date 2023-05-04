@@ -40,7 +40,7 @@ jobs:
 
           echo "{matrix}={$(cat packages.json)}" >> $GITHUB_OUTPUT
 
-          cat result.json
+          echo $GITHUB_OUTPUT
 
           # nvtake --file nvchecker/config.toml --all
 
