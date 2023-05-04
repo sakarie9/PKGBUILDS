@@ -38,7 +38,7 @@ jobs:
 
           echo "{matrix}={$(cat result.json)}" >> $GITHUB_OUTPUT
 
-          echo ${{needs.check-new-versions.outputs.matrix}}
+          cat result.json
 
           # nvtake --file nvchecker/config.toml --all
 
