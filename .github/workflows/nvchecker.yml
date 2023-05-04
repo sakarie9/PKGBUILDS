@@ -47,7 +47,7 @@ jobs:
 
           cat packages.json
 
-          echo "matrix={$(cat packages.json)}" >> $GITHUB_OUTPUT
+          echo "matrix=$(cat packages.json)" >> $GITHUB_OUTPUT
           
 
       # - https://github.com/actions/runner/issues/2033
@@ -88,5 +88,5 @@ jobs:
     steps:
       - name: Start Building Packages
         run: |
-          echo ${{ matrix.packages.name }}
+          echo ${{ matrix.packages }}
           
