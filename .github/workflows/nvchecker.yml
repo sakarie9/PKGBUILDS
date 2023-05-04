@@ -16,6 +16,8 @@ jobs:
   check-new-versions:
     name: Check New Versions
     runs-on: ubuntu-latest
+    outputs:
+      matrix: ${{ steps.set-matrix.outputs.matrix }}
     container:
       # image: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
       image: ghcr.io/sunlei/nvchecker
@@ -36,13 +38,15 @@ jobs:
           #nvcmp --file nvchecker/config.toml > result.tmp
           nvcmp -c nvchecker/config.toml -j > result.json
 
+          # nvtake --file nvchecker/config.toml --all
+
+      - name: Output matrix
+        id: steps.set-matrix.outputs.matrix
+        run: |
           jq -r '[.[] | .name] | @csv' result.json | sed 's/^/[/; s/$/]/' > packages.json
 
           echo "{matrix}={$(cat packages.json)}" >> $GITHUB_OUTPUT
-
-          echo $GITHUB_OUTPUT
-
-          # nvtake --file nvchecker/config.toml --all
+          
 
       # - https://github.com/actions/runner/issues/2033
       # - https://github.com/actions/checkout/issues/1048
