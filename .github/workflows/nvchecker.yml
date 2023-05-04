@@ -34,7 +34,7 @@ jobs:
         run: |
           nvchecker --logger=json --file nvchecker/config.toml 2>&1 | tee ${{ env.LOG_FILE }}
           #nvcmp --file nvchecker/config.toml > result.tmp
-          nvcmp -c config.toml -j > result.json
+          nvcmp -c nvchecker/config.toml -j > result.json
 
           echo "::set-output name=matrix::$(cat result.json)"
 
