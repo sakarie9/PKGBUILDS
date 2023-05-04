@@ -2,6 +2,8 @@ name: build
 
 on:
   push:
+    branches:
+      - pacman-repo-builder
     paths:
       - '!aur-patches/**'
       - '!.github/workflows/build-aur.yaml'

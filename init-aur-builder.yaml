@@ -10,6 +10,3 @@ global-settings:
   arch-filter: [x86_64]
 aur-package-names:
   - clash-meta
-  - dae
-  - dae-geoip-v2raycompat
-  - dae-geosite-v2raycompat
