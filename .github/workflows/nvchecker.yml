@@ -89,7 +89,7 @@ jobs:
       - name: Start Building Packages
         run: |
           # echo ${{ matrix.packages }}
-          pkgbuild_dir=pkgbuilds/${matrix.packages}
+          pkgbuild_dir=pkgbuilds/${{ matrix.packages }}
 
           if [[ ! -d $pkgbuild_dir ]]; then
             echo "$pkgbuild_dir not exist."
