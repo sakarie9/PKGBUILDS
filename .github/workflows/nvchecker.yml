@@ -29,7 +29,6 @@ jobs:
       - name: Set environment variables
         run: |
           echo "LOG_FILE=nvchecker_$(date +'%Y-%m-%d_%H-%M-%S').log" >> $GITHUB_ENV
-          sed -i -e "s/__GITHUB_ACCESS_TOKEN__/${{ secrets.GITHUB_TOKEN }}/g" keyfile.toml
 
       - name: Check version
         run: |
