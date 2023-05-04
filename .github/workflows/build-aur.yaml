@@ -5,7 +5,7 @@ on:
     - cron:  '00 20 * * *'
   push:
     branches:
-      - pacman-repo-builder
+      - main
     paths:
       - 'aur-patches/**'
       - '.github/workflows/build-aur.yaml'
