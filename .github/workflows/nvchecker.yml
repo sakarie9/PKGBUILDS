@@ -88,5 +88,32 @@ jobs:
     steps:
       - name: Start Building Packages
         run: |
-          echo ${{ matrix.packages }}
-          
+          # echo ${{ matrix.packages }}
+          pkgbuild_dir=pkgbuilds/$matrix.packages
+
+          if [[ ! -d $pkgbuild_dir ]]; then
+            echo "$pkgbuild_dir not exist."
+            # exit 1
+          fi
+
+          sudo chown -R build "$pkgbuild_dir"
+          sudo chown -R build /github/home
+
+          pacman -Syu --noconfirm
+
+          cd "$pkgbuild_dir"
+
+          makepkg --printsrcinfo > .SRCINFO
+          grep -E 'depends' .SRCINFO | \
+            sed -e 's/.*depends = //' -e 's/:.*//' | \
+            xargs yay -S --noconfirm
+
+          makepkg --syncdeps --noconfirm --install
+
+          source /etc/makepkg.conf # get PKGEXT
+          pacman -Qip "${pkgname}"-*"${PKGEXT}"
+          pacman -Qlp "${pkgname}"-*"${PKGEXT}"
+
+
+
+

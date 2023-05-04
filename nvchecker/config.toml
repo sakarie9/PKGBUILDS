@@ -5,7 +5,3 @@ newver = "new_ver.json"
 [go-musicfox-git]
 source = "github"
 github = "go-musicfox/go-musicfox"
-
-[hyprland-opti-git]
-source = "github"
-github = "hyprwm/Hyprland"
