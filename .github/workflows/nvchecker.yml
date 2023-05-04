@@ -22,11 +22,14 @@ jobs:
       image: docker://martynas/archlinux:latest
 
     steps:
-      - uses: actions/checkout@v3
-
       - name: Set environment variables
         run: |
+          sudo chown -R build /github/home
+          sudo chown -R build /github/workspace
+
           echo "LOG_FILE=nvchecker_$(date +'%Y-%m-%d_%H-%M-%S').log" >> $GITHUB_ENV
+
+      - uses: actions/checkout@v3
 
       - name: Check version
         run: |
