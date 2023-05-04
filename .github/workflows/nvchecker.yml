@@ -25,7 +25,6 @@ jobs:
       - name: Set environment variables
         run: |
           sudo chown -R build /github/home
-          sudo chown -R build /github/workspace
 
           echo "LOG_FILE=nvchecker_$(date +'%Y-%m-%d_%H-%M-%S').log" >> $GITHUB_ENV
 
