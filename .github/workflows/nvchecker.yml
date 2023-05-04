@@ -73,7 +73,7 @@ jobs:
     needs: check-new-versions
     strategy:
       matrix:
-        packages: ${{fromJson(needs.check-new-versions.outputs.matrix)}}
+        packages: ["AriaNg", "AriaNg-Native"]
     runs-on: ubuntu-latest
     container:
       image: docker://martynas/archlinux:latest
