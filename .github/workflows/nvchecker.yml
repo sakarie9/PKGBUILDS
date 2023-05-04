@@ -19,11 +19,7 @@ jobs:
     outputs:
       matrix: ${{ steps.set-matrix.outputs.matrix }}
     container:
-      # image: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
-      image: ghcr.io/sunlei/nvchecker
-      credentials:
-        username: ${{ github.actor }}
-        password: ${{ secrets.github_token }}
+      image: docker://martynas/archlinux:latest
 
     steps:
       - uses: actions/checkout@v3
@@ -34,88 +30,29 @@ jobs:
 
       - name: Check version
         run: |
+          pacman -Syu --noconfirm
+          pacman -S nvchecker --noconfirm
           nvchecker --logger=json --file nvchecker/config.toml 2>&1 | tee ${{ env.LOG_FILE }}
           #nvcmp --file nvchecker/config.toml > result.tmp
           nvcmp -c nvchecker/config.toml -j > result.json
 
-          # nvtake --file nvchecker/config.toml --all
-
-      - name: Output matrix
-        id: set-matrix
+      - name: Build
         run: |
-          jq -r '[.[] | .name] | @csv' result.json | sed 's/^/[/; s/$/]/' > packages.json
-
-          cat packages.json
-
-          echo "matrix=$(cat packages.json)" >> $GITHUB_OUTPUT
+          packages=$(cat result.json | jq -r '.[].name')
           
+          for package in $packages
+          do
+            pkgbuild_dir=pkgbuilds/${package}
+            cd "$pkgbuild_dir"
 
-      # - https://github.com/actions/runner/issues/2033
-      # - https://github.com/actions/checkout/issues/1048
-      # - https://github.com/actions/runner-images/issues/6775
-      - name: Fix git safe.directory in container
-        run: git config --global --add safe.directory /__w/${{ github.event.repository.name }}/${{ github.event.repository.name }}
+            makepkg --printsrcinfo > .SRCINFO
+            grep -E 'depends' .SRCINFO | \
+              sed -e 's/.*depends = //' -e 's/:.*//' | \
+              xargs yay -S --noconfirm
 
-      # - name: Commit version record files
-      #   uses: stefanzweifel/git-auto-commit-action@v4
-      #   with:
-      #     commit_message: "chore: apply version record files changes"
+            makepkg --syncdeps --noconfirm --install
 
-      #     # branch: ${{ github.head_ref }}
-      #     branch: master
-      #     commit_options: "--no-verify --signoff"
-      #     file_pattern: ./nvchecker/*.json
-      #     repository: .
-
-      #     commit_user_name: GitHub Actions Bot
-      #     commit_user_email: actions@github.com
-      #     commit_author: GitHub Actions Bot <actions@github.com>
-
-      # - name: nvchecker-action
-      #   id: nvchecker-action
-      #   uses: guizai/nvchecker-action@master
-      #   with:
-      #     source-file: 'config.toml'
-  
-  build:
-    needs: check-new-versions
-    strategy:
-      matrix:
-        packages: ${{ fromJSON(needs.check-new-versions.outputs.matrix) }}
-    runs-on: ubuntu-latest
-    container:
-      image: docker://martynas/archlinux:latest
-    steps:
-      - uses: actions/checkout@v3
-
-      - name: Start Building Packages
-        run: |
-          # echo ${{ matrix.packages }}
-          pkgbuild_dir=pkgbuilds/${{ matrix.packages }}
-
-          if [[ ! -d $pkgbuild_dir ]]; then
-            echo "$pkgbuild_dir not exist."
-            # exit 1
-          fi
-
-          sudo chown -R build "$pkgbuild_dir"
-          sudo chown -R build /github/home
-
-          pacman -Syu --noconfirm
-
-          cd "$pkgbuild_dir"
-
-          makepkg --printsrcinfo > .SRCINFO
-          grep -E 'depends' .SRCINFO | \
-            sed -e 's/.*depends = //' -e 's/:.*//' | \
-            xargs yay -S --noconfirm
-
-          makepkg --syncdeps --noconfirm --install
-
-          source /etc/makepkg.conf # get PKGEXT
-          pacman -Qip "${pkgname}"-*"${PKGEXT}"
-          pacman -Qlp "${pkgname}"-*"${PKGEXT}"
-
-
-
-
+            source /etc/makepkg.conf # get PKGEXT
+            pacman -Qip "${pkgname}"-*"${PKGEXT}"
+            pacman -Qlp "${pkgname}"-*"${PKGEXT}"
+          done
