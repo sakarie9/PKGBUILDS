@@ -45,7 +45,9 @@ jobs:
         run: |
           jq -r '[.[] | .name] | @csv' result.json | sed 's/^/[/; s/$/]/' > packages.json
 
-          echo "{matrix}={$(cat packages.json)}" >> $GITHUB_OUTPUT
+          cat packages.json
+
+          echo "matrix={$(cat packages.json)}" >> $GITHUB_OUTPUT
           
 
       # - https://github.com/actions/runner/issues/2033
@@ -79,7 +81,7 @@ jobs:
     needs: check-new-versions
     strategy:
       matrix:
-        packages: ${{needs.check-new-versions.outputs.matrix}}
+        packages: ${{ fromJSON(needs.check-new-versions.outputs.matrix) }}
     runs-on: ubuntu-latest
     container:
       image: docker://martynas/archlinux:latest
