@@ -46,20 +46,20 @@ jobs:
       - name: Fix git safe.directory in container
         run: git config --global --add safe.directory /__w/${{ github.event.repository.name }}/${{ github.event.repository.name }}
 
-      - name: Commit version record files
-        uses: stefanzweifel/git-auto-commit-action@v4
-        with:
-          commit_message: "chore: apply version record files changes"
+      # - name: Commit version record files
+      #   uses: stefanzweifel/git-auto-commit-action@v4
+      #   with:
+      #     commit_message: "chore: apply version record files changes"
 
-          # branch: ${{ github.head_ref }}
-          branch: master
-          commit_options: "--no-verify --signoff"
-          file_pattern: ./nvchecker/*.json
-          repository: .
+      #     # branch: ${{ github.head_ref }}
+      #     branch: master
+      #     commit_options: "--no-verify --signoff"
+      #     file_pattern: ./nvchecker/*.json
+      #     repository: .
 
-          commit_user_name: GitHub Actions Bot
-          commit_user_email: actions@github.com
-          commit_author: GitHub Actions Bot <actions@github.com>
+      #     commit_user_name: GitHub Actions Bot
+      #     commit_user_email: actions@github.com
+      #     commit_author: GitHub Actions Bot <actions@github.com>
 
       # - name: nvchecker-action
       #   id: nvchecker-action
