@@ -4,12 +4,12 @@ on:
   push:
     branches:
       - main
-    paths:
-      - '!aur-patches/**'
-      - '!.github/workflows/build-aur.yaml'
-      - '!init-aur-builder.yaml'
-      - '!init-aur-patcher.sh'
-      - '!README.md'
+    paths-ignore:
+      - 'aur-patches/**'
+      - '.github/workflows/build-aur.yaml'
+      - 'init-aur-builder.yaml'
+      - 'init-aur-patcher.sh'
+      - 'README.md'
   schedule:
     - cron:  '00 22 * * *'
   workflow_run:
