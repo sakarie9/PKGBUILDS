@@ -1,6 +1,8 @@
 name: build
 
 on:
+  schedule:
+    - cron:  '00 22 * * *'
   push:
     branches:
       - main
@@ -10,12 +12,11 @@ on:
       - 'init-aur-builder.yaml'
       - 'init-aur-patcher.sh'
       - 'README.md'
-  schedule:
-    - cron:  '00 22 * * *'
-  workflow_run:
-    workflows: ["trigger"]
-    types: [completed]
   workflow_dispatch:
+    inputs:
+      pkgname:
+        description: '(Optional) Pkgname needs to be rebuild '
+        required: false
 
 jobs:
   build:
@@ -33,6 +34,14 @@ jobs:
           token: ${{ secrets.REPO_TOKEN }}
           repository: xzsk2/arch-repo
           path: arch-repo
+
+      - name: If rebuild requested
+        if: "${{ github.event.inputs.pkgname != '' }}"
+        run: |
+          pkgbuild_path=pkgbuilds/${{ github.event.inputs.level }}/PKGBUILD
+          pkgrel=$(grep '^pkgrel=' $pkgbuild_path | cut -d= -f2)
+          pkgrel=$((pkgrel+1))
+          sed -i "s/^pkgrel=.*/pkgrel=$pkgrel/" $pkgbuild_path
 
       - name: Build pacman packages
         uses: pacman-repo-builder/action@0.0.0-rc.64
