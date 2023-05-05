@@ -57,8 +57,8 @@ cd "${srcdir}/${_pkgname}"
 	git submodule update --init
 
 	# With those flags set Hyprland does crash
-	export CFLAGS="${CFLAGS/-Wp,-D_GLIBCXX_ASSERTIONS/} -O3 -flto"
-	export CXXFLAGS="${CXXFLAGS/-Wp,-D_GLIBCXX_ASSERTIONS/} -O3 -flto"
+	export CFLAGS="${CFLAGS/-Wp,-D_GLIBCXX_ASSERTIONS/} -O3 -flto -march=x86-64-v3"
+	export CXXFLAGS="${CXXFLAGS/-Wp,-D_GLIBCXX_ASSERTIONS/} -O3 -flto -march=x86-64-v3"
 
 	make fixwlr
 
