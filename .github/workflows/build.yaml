@@ -38,7 +38,7 @@ jobs:
       - name: If rebuild requested
         if: "${{ github.event.inputs.pkgname != '' }}"
         run: |
-          pkgbuild_path=pkgbuilds/${{ github.event.inputs.level }}/PKGBUILD
+          pkgbuild_path=pkgbuilds/${{ github.event.inputs.pkgname }}/PKGBUILD
           pkgrel=$(grep '^pkgrel=' $pkgbuild_path | cut -d= -f2)
           pkgrel=$((pkgrel+1))
           sed -i "s/^pkgrel=.*/pkgrel=$pkgrel/" $pkgbuild_path
