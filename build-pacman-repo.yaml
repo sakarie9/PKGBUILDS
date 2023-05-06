@@ -13,3 +13,4 @@ members:
   - directory: go-musicfox-git
   - directory: hyprland-autoname-workspaces-git
   - directory: hyprland-opti-git
+  - directory: qcm-git
