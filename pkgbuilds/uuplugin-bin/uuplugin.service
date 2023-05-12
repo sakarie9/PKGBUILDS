@@ -1,5 +1,5 @@
 [Unit]
-Description=UU Plugin for Linux
+Description=UU Steam Deck Plugin for General Linux
 Wants=network-online.target
 After=network.target network-online.target
 
