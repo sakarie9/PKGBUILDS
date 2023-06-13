@@ -90,5 +90,6 @@ jobs:
           # Normal commit
           git add -vA
           git diff-index --quiet HEAD || git commit -m "Update by $GITHUB_REPOSITORY@$GITHUB_SHA"
+          git pull origin main --rebase=true # to avoid conflicts due to data races
           git push origin main
 
