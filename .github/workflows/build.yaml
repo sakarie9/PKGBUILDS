@@ -32,7 +32,7 @@ jobs:
         uses: actions/checkout@v3
         with:
           token: ${{ secrets.REPO_TOKEN }}
-          repository: xzsk2/arch-repo
+          repository: sakarie9/arch-repo
           path: arch-repo
 
       - name: If rebuild requested
@@ -51,7 +51,7 @@ jobs:
               echo ''
               echo '[sakari-aur]'
               echo 'SigLevel = Optional'
-              echo 'Server = https://raw.github.com/xzsk2/arch-repo/main/repo'
+              echo 'Server = https://raw.github.com/sakarie9/arch-repo/main/repo'
               # echo ''
               # echo '[archlinuxcn]'
               # echo 'Server = https://mirrors.xtom.hk/archlinuxcn/$arch'
