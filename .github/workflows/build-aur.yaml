@@ -51,6 +51,8 @@ jobs:
         with:
           command: |
             pacman -Sy
+            # import gpg keys
+            gpg --recv-keys B94556F81C85D0D5 # davfs2
             build-pacman-repo build
 
       - name: Cleanup packages
