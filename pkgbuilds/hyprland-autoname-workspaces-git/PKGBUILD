@@ -1,4 +1,4 @@
-# Maintainer: Sakari <sk308269317@outlook.com>
+# Maintainer: Cyrinux <pkgbuilds AT levis DOT name>
 
 _pkgname=hyprland-autoname-workspaces
 pkgname="${_pkgname}-git"
@@ -9,15 +9,20 @@ arch=('x86_64')
 url="https://github.com/hyprland-community/${_pkgname}"
 license=('ISC')
 depends=('otf-font-awesome' 'hyprland' 'systemd-libs')
-makedepends=('cargo' 'git' 'clang')
+makedepends=('cargo' 'git' 'clang' 'gcc' 'pkgconf')
 conflicts=("hyprland-autoname-workspaces" "hyprland-autoname-workspaces-bin")
 provides=("hyprland-autoname-workspaces")
-source=("git+https://github.com/cyrinux/${_pkgname}.git")
+source=("git+https://github.com/hyprland-community/${_pkgname}.git")
 sha256sums=('SKIP')
 
 pkgver() {
     cd "${_pkgname}"
     git describe --long --tags | sed 's/\([^-]*-g\)/r\1/;s/-/./g'
+}
+
+check() {
+    cd "${_pkgname}"
+    make test
 }
 
 build() {
@@ -26,9 +31,6 @@ build() {
 }
 
 package() {
-    cd "${srcdir}/${_pkgname}"
-    install -d "${pkgdir}/usr/bin"
-    install -d "${pkgdir}/usr/share/licenses/${_pkgname}"
-    install -Dm755 "target/release/${_pkgname}" "${pkgdir}/usr/bin/${_pkgname}"
-    install -Dm644 "LICENSE.md" "${pkgdir}/usr/share/licenses/${_pkgname}"
+    cd "${_pkgname}"
+    make install DESTDIR="${pkgdir}"
 }
