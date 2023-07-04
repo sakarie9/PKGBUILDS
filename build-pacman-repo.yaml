@@ -9,7 +9,6 @@ global-settings:
   install-missing-dependencies: true
   arch-filter: [x86_64]
 members:
-  - directory: uuplugin-bin
   - directory: go-musicfox-git
   - directory: hyprland-autoname-workspaces-git
   - directory: hyprland-opti-git
