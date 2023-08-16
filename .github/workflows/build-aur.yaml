@@ -20,6 +20,13 @@ jobs:
     steps:
       - uses: actions/checkout@v3
 
+      - name: Get current time
+        uses: josStorer/get-current-time@v2.0.2
+        id: current-time
+        with:
+          format: "YYYY-MM-DD HH:mm:ss"
+          utcOffset: "+08:00"
+
       - name: Install APT packages
         run: sudo apt install -y git python3 python3-yaml
 
@@ -28,13 +35,13 @@ jobs:
         with:
           token: ${{ secrets.REPO_TOKEN }}
           repository: sakarie9/arch-repo
-          path: arch-repo
+          path: arch-repo/repo
 
       - name: Init AUR Builder
         uses: pacman-repo-builder/action@0.0.0-rc.64
         with:
           command: |
-            mkdir -p arch-repo/repo
+            mkdir -p arch-repo/release
             rm build-pacman-repo.yaml
             mkdir -p aur-pkgbuilds
             chmod -R 755 aur-pkgbuilds
@@ -52,18 +59,24 @@ jobs:
           command: |
             pacman -Sy
             # import gpg keys
-            gpg --recv-keys B94556F81C85D0D5 # davfs2
             build-pacman-repo build
 
       - name: Cleanup packages
-        run: ./package-cleanup.sh sakari-aur arch-repo/repo
+        run: ./package-cleanup.sh sakari-aur arch-repo/release
 
-      - name: Upload packages
+      - name: Generate changelog
+        run: |
+          CHANGELOG_PATH=arch-repo/repo/CHANGELOG
+          echo '' >> $CHANGELOG_PATH
+          date -d "+8 hours" +%F' '%T >> $CHANGELOG_PATH
+          diff -u <(ls arch-repo/release-old) <(ls arch-repo/release) | tail -n +4 >> $CHANGELOG_PATH
+
+      - name: Upload repo
         env:
           COMMIT_AUTHOR_NAME: ${{ secrets.COMMIT_AUTHOR_NAME }}
           COMMIT_AUTHOR_EMAIL: ${{ secrets.COMMIT_AUTHOR_EMAIL }}
         run: |
-          cd arch-repo
+          cd arch-repo/repo
           git config --global user.name "$COMMIT_AUTHOR_NAME"
           git config --global user.email "$COMMIT_AUTHOR_EMAIL"
 
@@ -82,4 +95,22 @@ jobs:
           # Normal commit
           git add -vA
           git diff-index --quiet HEAD || git commit -m "Update by $GITHUB_REPOSITORY@$GITHUB_SHA"
+          # tag
+          if [ $(git tag -l repo) ]; then
+            git tag -d repo
+          fi
+          git tag repo
+          # push
+          git pull origin main --rebase=true # to avoid conflicts due to data races
           git push origin main
+
+      - name: Upload binaries to release
+        uses: svenstaro/upload-release-action@v2
+        with:
+          repo_name: sakarie9/arch-repo
+          repo_token: ${{ secrets.REPO_TOKEN }}
+          file: arch-repo/release/*
+          tag: repo
+          overwrite: true
+          file_glob: true
+          release_name: ${{ steps.current-time.outputs.formattedTime }}
