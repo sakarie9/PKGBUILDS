@@ -1,17 +1,22 @@
-name: build aur
+name: build pkgbuild
 
 on:
   # schedule:
-  #   - cron:  '00 20 * * *'
+  #   - cron:  '00 22 * * *'
   # push:
   #   branches:
   #     - main
-  #   paths:
+  #   paths-ignore:
   #     - 'aur-patches/**'
   #     - '.github/workflows/build-aur.yaml'
   #     - 'init-aur-builder.yaml'
   #     - 'init-aur-patcher.sh'
+  #     - 'README.md'
   workflow_dispatch:
+    inputs:
+      pkgname:
+        description: '(Optional) Pkgname needs to be rebuild '
+        required: false
 
 jobs:
   build:
@@ -42,27 +47,31 @@ jobs:
           ./git-clone-releases.sh sakarie9/arch-repo arch-repo/release
           cp -r arch-repo/release arch-repo/release-old
 
-      - name: Init AUR Builder
-        uses: pacman-repo-builder/action@0.0.0-rc.64
-        with:
-          command: |
-            rm build-pacman-repo.yaml
-            mkdir -p aur-pkgbuilds
-            chmod -R 755 aur-pkgbuilds
-            build-pacman-repo init-aur-builder
-            cat build-pacman-repo.yaml
-
-      - name: Patch packages
+      - name: If rebuild requested
+        if: "${{ github.event.inputs.pkgname != '' }}"
         run: |
-          sudo chmod -R +x aur-patches
-          sudo ./init-aur-patcher.sh
+          pkgbuild_path=pkgbuilds/${{ github.event.inputs.pkgname }}/PKGBUILD
+          pkgrel=$(grep '^pkgrel=' $pkgbuild_path | cut -d= -f2)
+          pkgrel=$((pkgrel+1))
+          sed -i "s/^pkgrel=.*/pkgrel=$pkgrel/" $pkgbuild_path
 
       - name: Build pacman packages
         uses: pacman-repo-builder/action@0.0.0-rc.64
         with:
           command: |
+            (
+              echo ''
+              echo '[sakari-aur]'
+              echo 'SigLevel = Optional'
+              echo 'Server = https://raw.github.com/sakarie9/arch-repo/main/repo'
+              # echo ''
+              # echo '[archlinuxcn]'
+              # echo 'Server = https://mirrors.xtom.hk/archlinuxcn/$arch'
+            ) >> /etc/pacman.conf
+            # pacman-key --init
+            # pacman -Sy --noconfirm archlinuxcn-keyring
             pacman -Sy
-            # import gpg keys
+            ./git-pkgver-update.sh
             build-pacman-repo build
 
       - name: Cleanup packages
@@ -77,6 +86,7 @@ jobs:
           diff -u <(ls arch-repo/release-old) <(ls arch-repo/release) | grep -E "^\+|^-" | tail -n +4 >> $TMP_PATH
           cat $CHANGELOG_PATH >> $TMP_PATH
           mv $TMP_PATH $CHANGELOG_PATH
+
 
       - name: Delete old release
         uses: dev-drprasad/delete-tag-and-release@v1.0
@@ -129,3 +139,5 @@ jobs:
           overwrite: true
           file_glob: true
           release_name: ${{ steps.current-time.outputs.formattedTime }}
+        
+
