@@ -39,6 +39,7 @@ jobs:
       - name: Clone target repository
         uses: actions/checkout@v3
         with:
+          token: ${{ secrets.REPO_TOKEN }}
           repository: sakarie9/arch-repo
           path: arch-repo/repo
 
