@@ -38,7 +38,7 @@ jobs:
       - name: Clone releases
         run: |
           ./git-clone-releases.sh sakarie9/arch-repo arch-repo/release
-          cp arch-repo/release arch-repo/release-old
+          cp -r arch-repo/release arch-repo/release-old
 
       - name: If rebuild requested
         if: "${{ github.event.inputs.pkgname != '' }}"
