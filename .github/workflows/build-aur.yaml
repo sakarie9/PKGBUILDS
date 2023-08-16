@@ -79,14 +79,6 @@ jobs:
           cat $CHANGELOG_PATH >> $TMP_PATH
           mv $TMP_PATH $CHANGELOG_PATH
 
-      - name: Delete old release
-        uses: dev-drprasad/delete-tag-and-release@v1.0
-        with:
-          tag_name: repo 
-          github_token: ${{ secrets.REPO_TOKEN }}
-          delete_release: true
-          repo: sakarie9/arch-repo
-
       - name: Upload repo
         env:
           COMMIT_AUTHOR_NAME: ${{ secrets.COMMIT_AUTHOR_NAME }}
@@ -119,6 +111,18 @@ jobs:
           # push
           git pull origin main --rebase=true # to avoid conflicts due to data races
           git push origin main
+
+      - name: Delete old release assets
+        uses: mknejp/delete-release-assets@v1
+        with:
+          token: ${{ secrets.REPO_TOKEN }}
+          tag: repo
+          repository: sakarie9/arch-repo
+          assets: |
+            *.db
+            *.files
+            *.gz
+            *.zst
 
       - name: Upload binaries to release
         uses: svenstaro/upload-release-action@v2
