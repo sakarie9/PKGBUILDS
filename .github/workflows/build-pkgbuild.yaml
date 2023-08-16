@@ -82,6 +82,8 @@ jobs:
         run: |
           CHANGELOG_PATH=arch-repo/repo/CHANGELOG
           TMP_PATH=arch-repo/repo/CHANGELOG_tmp
+          touch $CHANGELOG_PATH
+          touch $TMP_PATH
           echo '' > $TMP_PATH
           date -d "+8 hours" +%F' '%T >> $TMP_PATH
           diff -u <(ls arch-repo/release-old) <(ls arch-repo/release) | grep -E "^\+|^-" | tail -n +4 >> $TMP_PATH
