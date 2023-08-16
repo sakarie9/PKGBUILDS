@@ -120,6 +120,8 @@ jobs:
           token: ${{ secrets.REPO_TOKEN }}
           tag: repo
           repository: sakarie9/arch-repo
+          fail-if-no-release: false
+          fail-if-no-assets: false
           assets: |
             *.db
             *.files
