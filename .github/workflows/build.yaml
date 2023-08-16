@@ -84,6 +84,13 @@ jobs:
           date -d "+8 hours" +%F' '%T >> $CHANGELOG_PATH
           diff -u <(ls arch-repo/release-old) <(ls arch-repo/release) | tail -n +4 >> $CHANGELOG_PATH
 
+      - name: Delete old release
+        uses: dev-drprasad/delete-tag-and-release@v1.0
+        with:
+          tag_name: repo 
+          github_token: ${{ secrets.REPO_TOKEN }}
+          delete_release: true
+          repo: sakarie9/arch-repo
 
       - name: Upload repo
         env:
@@ -118,13 +125,6 @@ jobs:
           git pull origin main --rebase=true # to avoid conflicts due to data races
           git push origin main
 
-      - name: Delete old release
-        uses: dev-drprasad/delete-tag-and-release@v1.0
-        with:
-          tag_name: repo 
-          github_token: ${{ secrets.REPO_TOKEN }}
-          delete_release: true
-          repo: sakarie9/arch-repo
       - name: Upload binaries to release
         uses: svenstaro/upload-release-action@v2
         with:
