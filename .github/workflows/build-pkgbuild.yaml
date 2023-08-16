@@ -12,8 +12,7 @@ on:
   #     - 'init-aur-builder.yaml'
   #     - 'init-aur-patcher.sh'
   #     - 'README.md'
-  repository_dispatch:
-    types: [event-pkgbuild]
+  workflow_call:
   workflow_dispatch:
     inputs:
       pkgname:

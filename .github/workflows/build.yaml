@@ -10,19 +10,15 @@ on:
       - 'LICENSE'
   workflow_dispatch:
 jobs:
-  call-pkgbuild:
+  build:
     runs-on: ubuntu-latest
     steps:
-      - name: Repository Dispatch
-        uses: peter-evans/repository-dispatch@v2
+      - uses: actions/checkout@v3
         with:
-          event-type: event-pkgbuild
+          token: ${{ secrets.REPO_TOKEN }}
+  call-pkgbuild:
+    uses: ./.github/workflows/build-pkgbuild.yaml
   call-aur:
     if: ${{ always() }} #This will make your workflow2 executed even if workflow1 fails, remove this, if you want to run this only on success of workflow1
     needs: call-pkgbuild
-    runs-on: ubuntu-latest
-    steps:
-      - name: Repository Dispatch
-        uses: peter-evans/repository-dispatch@v2
-        with:
-          event-type: event-aur
+    uses: ./.github/workflows/build-aur.yaml

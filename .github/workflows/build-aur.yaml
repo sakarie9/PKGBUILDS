@@ -11,8 +11,7 @@ on:
   #     - '.github/workflows/build-aur.yaml'
   #     - 'init-aur-builder.yaml'
   #     - 'init-aur-patcher.sh'
-  repository_dispatch:
-    types: [event-aur]
+  workflow_call:
   workflow_dispatch:
 
 jobs:
