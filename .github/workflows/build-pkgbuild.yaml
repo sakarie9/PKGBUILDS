@@ -138,6 +138,6 @@ jobs:
           tag: repo
           overwrite: true
           file_glob: true
-          prerelease: true
+          #prerelease: true
           #release_name: ${{ steps.current-time.outputs.formattedTime }}
           release_name: arch-repo
