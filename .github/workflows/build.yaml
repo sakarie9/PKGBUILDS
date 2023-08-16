@@ -18,7 +18,9 @@ jobs:
           token: ${{ secrets.REPO_TOKEN }}
   call-pkgbuild:
     uses: ./.github/workflows/build-pkgbuild.yaml
+    secrets: inherit
   call-aur:
     if: ${{ always() }} #This will make your workflow2 executed even if workflow1 fails, remove this, if you want to run this only on success of workflow1
     needs: call-pkgbuild
     uses: ./.github/workflows/build-aur.yaml
+    secrets: inherit

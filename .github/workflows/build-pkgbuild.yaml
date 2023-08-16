@@ -87,7 +87,6 @@ jobs:
           cat $CHANGELOG_PATH >> $TMP_PATH
           mv $TMP_PATH $CHANGELOG_PATH
 
-
       - name: Delete old release
         uses: dev-drprasad/delete-tag-and-release@v1.0
         with:
@@ -138,6 +137,6 @@ jobs:
           tag: repo
           overwrite: true
           file_glob: true
-          release_name: ${{ steps.current-time.outputs.formattedTime }}
-        
-
+          prerelease: true
+          #release_name: ${{ steps.current-time.outputs.formattedTime }}
+          release_name: arch-repo
