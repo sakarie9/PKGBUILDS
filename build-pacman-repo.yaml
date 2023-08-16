@@ -1,6 +1,6 @@
 global-settings:
   container: pkgbuilds
-  repository: arch-repo/repo/sakari-aur.db.tar.gz
+  repository: arch-repo/release/sakari-aur.db.tar.gz
   dereference-database-symlinks: true
   clean-after-build: true
   packager: 'Sakari <sk308269317@outlook.com>'

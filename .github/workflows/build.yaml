@@ -33,7 +33,12 @@ jobs:
         with:
           token: ${{ secrets.REPO_TOKEN }}
           repository: sakarie9/arch-repo
-          path: arch-repo
+          path: arch-repo/repo
+
+      - name: Clone releases
+        run: |
+          ./git-clone-releases.sh sakarie9/arch-repo arch-repo/release
+          cp arch-repo/release arch-repo/release-old
 
       - name: If rebuild requested
         if: "${{ github.event.inputs.pkgname != '' }}"
@@ -59,19 +64,22 @@ jobs:
             # pacman-key --init
             # pacman -Sy --noconfirm archlinuxcn-keyring
             pacman -Sy
-            mkdir -p arch-repo/repo
+            mkdir -p arch-repo/release
             ./git-pkgver-update.sh
             build-pacman-repo build
 
       - name: Cleanup packages
-        run: ./package-cleanup.sh sakari-aur arch-repo/repo
+        run: ./package-cleanup.sh sakari-aur arch-repo/release
 
-      - name: Upload packages
+      - name: Generate changelog
+        run: diff -u <(ls arch-repo/release-old) <(ls arch-repo/release) | tail -n +4 > arch-repo/repo/CHANGELOG
+
+      - name: Upload repo
         env:
           COMMIT_AUTHOR_NAME: ${{ secrets.COMMIT_AUTHOR_NAME }}
           COMMIT_AUTHOR_EMAIL: ${{ secrets.COMMIT_AUTHOR_EMAIL }}
         run: |
-          cd arch-repo
+          cd arch-repo/repo
           git config --global user.name "$COMMIT_AUTHOR_NAME"
           git config --global user.email "$COMMIT_AUTHOR_EMAIL"
 
@@ -90,6 +98,30 @@ jobs:
           # Normal commit
           git add -vA
           git diff-index --quiet HEAD || git commit -m "Update by $GITHUB_REPOSITORY@$GITHUB_SHA"
+          # tag
+          if [ $(git tag -l release) ]; then
+            git tag -d release
+          fi
+          git tag release
+          # push
           git pull origin main --rebase=true # to avoid conflicts due to data races
           git push origin main
+
+      - name: Get current time
+        uses: josStorer/get-current-time@v2.0.2
+        id: current-time
+        with:
+          format: "YYYY-MM-DD HH:mm:ss"
+          utcOffset: "+08:00"
+      - name: Upload binaries to release
+        uses: svenstaro/upload-release-action@v2
+        with:
+          repo_name: sakarie9/arch-repo
+          repo_token: ${{ secrets.REPO_TOKEN }}
+          file: arch-repo/release/*
+          tag: release
+          overwrite: true
+          file_glob: true
+          release_name: ${{ steps.current-time.outputs.formattedTime }}
+        
 
