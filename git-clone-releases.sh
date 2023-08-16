@@ -3,7 +3,7 @@
 ACTION_REPO=$1
 ACTION_PATH=$2
 
-response=$(curl -s https://api.github.com/repos/$ACTION_REPO/releases/latest)
+response=$(curl -s https://api.github.com/repos/$ACTION_REPO/releases)
 if [[ $response == *"\"message\": \"Not Found\""* ]]; then
     echo "Release not found."
     mkdir -p $ACTION_PATH
