@@ -37,11 +37,15 @@ jobs:
           repository: sakarie9/arch-repo
           path: arch-repo/repo
 
+      - name: Clone releases
+        run: |
+          ./git-clone-releases.sh sakarie9/arch-repo arch-repo/release
+          cp -r arch-repo/release arch-repo/release-old
+
       - name: Init AUR Builder
         uses: pacman-repo-builder/action@0.0.0-rc.64
         with:
           command: |
-            mkdir -p arch-repo/release
             rm build-pacman-repo.yaml
             mkdir -p aur-pkgbuilds
             chmod -R 755 aur-pkgbuilds

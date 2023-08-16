@@ -71,7 +71,6 @@ jobs:
             # pacman-key --init
             # pacman -Sy --noconfirm archlinuxcn-keyring
             pacman -Sy
-            mkdir -p arch-repo/release
             ./git-pkgver-update.sh
             build-pacman-repo build
 
