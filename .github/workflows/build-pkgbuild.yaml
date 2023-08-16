@@ -12,6 +12,7 @@ on:
   #     - 'init-aur-builder.yaml'
   #     - 'init-aur-patcher.sh'
   #     - 'README.md'
+  workflow_call:
   workflow_dispatch:
     inputs:
       pkgname:
