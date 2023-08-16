@@ -64,7 +64,7 @@ jobs:
               echo ''
               echo '[sakari-aur]'
               echo 'SigLevel = Optional'
-              echo 'Server = https://raw.github.com/sakarie9/arch-repo/main/repo'
+              echo 'Server = https://github.com/sakarie9/arch-repo/releases/download/repo'
               # echo ''
               # echo '[archlinuxcn]'
               # echo 'Server = https://mirrors.xtom.hk/archlinuxcn/$arch'
