@@ -9,7 +9,7 @@ if [[ $response == *"\"message\": \"Not Found\""* ]]; then
     mkdir -p $ACTION_PATH
 else
     echo "Release found."
-    curl -s "https://api.github.com/repos/$ACTION_REPO/releases/latest" \
+    curl -s "https://api.github.com/repos/$ACTION_REPO/releases" \
     | grep "browser_download_url" \
     | cut -d : -f 2,3 \
     | tr -d \" \
