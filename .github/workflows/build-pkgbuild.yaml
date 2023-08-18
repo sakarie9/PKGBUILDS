@@ -89,6 +89,7 @@ jobs:
             echo '' > $TMP_PATH
             date -d "+8 hours" +%F' '%T >> $TMP_PATH
             diff -u <(ls arch-repo/release-old) <(ls arch-repo/release) | grep -E "^\+|^-" | tail -n +4 >> $TMP_PATH
+            cat $CHANGELOG_PATH >> $TMP_PATH
             mv $TMP_PATH $CHANGELOG_PATH
           fi
 
