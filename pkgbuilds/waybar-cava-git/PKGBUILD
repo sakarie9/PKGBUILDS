@@ -1,7 +1,7 @@
 # Maintainer: Alexis Rouillard <contact@arouillard.fr>
 
 pkgname=waybar-cava-git
-pkgver=1
+pkgver=0.9.22.r69.g9b8adc19
 pkgrel=1
 pkgdesc='Highly customizable Wayland bar for Sway and Wlroots based compositors (GIT)'
 arch=('x86_64')
@@ -32,6 +32,11 @@ depends=(
     'libxkbcommon'
     'libwireplumber'
     'playerctl'
+    # cava depends
+    'iniparser'
+    'fftw'
+    'portaudio'
+	'sdl2'
 )
 makedepends=(
     'git'
@@ -53,19 +58,17 @@ source=("${pkgname}::git+https://github.com/Alexays/Waybar")
 
 sha1sums=('SKIP')
 
+options=(!lto) # prevent build errors
+
 pkgver() {
     cd "${srcdir}/${pkgname}"
     git describe --long --tags | sed 's/\([^-]*-g\)/r\1/;s/-/./g'
 }
 
-prepare() {
-    cd "${srcdir}/${pkgname}"
-}
-
 build() {
     cd "${srcdir}/${pkgname}"
-    rm -rf "${srcdir}/build"
-    meson --prefix=/usr \
+    meson setup \
+          --prefix=/usr \
           --buildtype=plain \
           --auto-features=enabled \
           -Dexperimental=true \
