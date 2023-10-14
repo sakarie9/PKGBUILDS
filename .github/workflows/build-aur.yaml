@@ -55,7 +55,6 @@ jobs:
 
       - name: Patch packages
         run: |
-          pacman -Sy --noconfirm devtools
           sudo chmod +x init-aur-from-pkgctl.sh
           sudo ./init-aur-from-pkgctl.sh
 
