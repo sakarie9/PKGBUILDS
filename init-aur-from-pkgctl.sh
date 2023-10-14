@@ -9,5 +9,5 @@ for(( i=0;i<${#array[@]};i++)) do
     URL_FULL=$URL_BASE/$pkgbase.git
     git clone $URL_FULL aur-pkgbuilds/$pkgbase
 
-    echo "- directory: $pkgbase" >> build-pacman-repo.yaml
+    echo "- directory: $pkgbase" >> aur-repos.yaml
 done
