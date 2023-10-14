@@ -4,11 +4,10 @@ packages=(telegram-desktop)
 
 URL_BASE=https://gitlab.archlinux.org/archlinux/packaging/packages
 
-cd aur-pkgbuilds
-
-git clone 
-
 for(( i=0;i<${#array[@]};i++)) do
-    URL_FULL=$URL_BASE/${array[i]}.git
-    git clone $URL_FULL
+    pkgbase=${array[i]}
+    URL_FULL=$URL_BASE/$pkgbase.git
+    git clone $URL_FULL aur-pkgbuilds/$pkgbase
+
+    echo "- directory: $pkgbase" >> build-pacman-repo.yaml
 done
