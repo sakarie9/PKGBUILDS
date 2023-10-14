@@ -57,7 +57,7 @@ jobs:
         run: |
           sudo chmod +x init-aur-from-pkgctl.sh
           sudo ./init-aur-from-pkgctl.sh
-          echo aur-repos.yaml | sudo tee -a build-pacman-repo.yaml
+          cat aur-repos.yaml | sudo tee -a build-pacman-repo.yaml
           cat build-pacman-repo.yaml
 
       - name: Patch packages
