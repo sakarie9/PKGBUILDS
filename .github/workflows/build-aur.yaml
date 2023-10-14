@@ -55,6 +55,11 @@ jobs:
 
       - name: Patch packages
         run: |
+          sudo chmod +x init-aur-from-pkgctl.sh
+          sudo ./init-aur-from-pkgctl.sh
+
+      - name: Patch packages
+        run: |
           sudo chmod -R +x aur-patches
           sudo ./init-aur-patcher.sh
 
