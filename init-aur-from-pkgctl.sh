@@ -1,6 +1,6 @@
 #!/bin/bash
 
-packages=(telegram-desktop)
+packages=()
 
 URL_BASE=https://gitlab.archlinux.org/archlinux/packaging/packages
 
