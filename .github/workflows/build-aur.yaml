@@ -53,7 +53,7 @@ jobs:
             build-pacman-repo init-aur-builder
             cat build-pacman-repo.yaml
 
-      - name: Patch packages
+      - name: Clone packages from official repo
         run: |
           sudo chmod +x init-aur-from-pkgctl.sh
           sudo ./init-aur-from-pkgctl.sh
