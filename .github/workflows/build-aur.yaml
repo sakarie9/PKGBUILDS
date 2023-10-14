@@ -51,14 +51,14 @@ jobs:
             mkdir -p aur-pkgbuilds
             chmod -R 755 aur-pkgbuilds
             build-pacman-repo init-aur-builder
-            # init-aur-from-pkgctl.sh
-            cat aur-repos.yaml >> build-pacman-repo.yaml
             cat build-pacman-repo.yaml
 
       - name: Clone packages from official repo
         run: |
           sudo chmod +x init-aur-from-pkgctl.sh
           sudo ./init-aur-from-pkgctl.sh
+          cat aur-repos.yaml >> build-pacman-repo.yaml
+          cat build-pacman-repo.yaml
 
       - name: Patch packages
         run: |
