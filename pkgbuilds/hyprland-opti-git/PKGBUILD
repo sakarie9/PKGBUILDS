@@ -117,6 +117,8 @@ package() {
 	rm "$pkgdir/usr/lib/pkgconfig/wlroots.pc"
 	# resolve conflicts with xdg-desktop-portal-hyprland from repo
 	rm -rf "$pkgdir/usr/share/xdg-desktop-portal"
+	rm -rf "$pkgdir/usr/share/hyprland-protocols/protocols"
+	rm -rf "$pkgdir/usr/share/pkgconfig/hyprland-protocols.pc"
 	# FIXME: meson.build shall install version.h
 	install -Dm0644 -t "$pkgdir/usr/include/hyprland/src" src/version.h
 
