@@ -51,7 +51,8 @@ makedepends=(cmake
 	meson
 	ninja
 	vulkan-headers
-	xorgproto)
+	xorgproto
+	jq)
 provides=("hyprland=${pkgver%%.r*}")
 conflicts=(hyprland)
 source=("git+https://github.com/hyprwm/Hyprland.git"
@@ -83,13 +84,17 @@ prepare() {
 	popd
 }
 
+# pkgver() {
+# 	cd Hyprland
+# 	(
+# 		set -o pipefail
+# 		git describe --long 2>/dev/null | sed 's/\([^-]*-g\)/r\1/;s/-/./g' ||
+# 			printf "r%s.%s" "$(git rev-list --count HEAD)" "$(git rev-parse --short HEAD)"
+# 	)
+# }
+
 pkgver() {
-	cd Hyprland
-	(
-		set -o pipefail
-		git describe --long 2>/dev/null | sed 's/\([^-]*-g\)/r\1/;s/-/./g' ||
-			printf "r%s.%s" "$(git rev-list --count HEAD)" "$(git rev-parse --short HEAD)"
-	)
+  git -C Hyprland describe --long --tags | sed 's/^v//;s/\([^-]*-\)g/r\1/;s/-/./g'
 }
 
 build() {
