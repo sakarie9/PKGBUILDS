@@ -9,6 +9,8 @@ process_pkgbuild() {
   # restore pkgrel
   sed -i "s/pkgrel=.*/pkgrel=$_pkgrel/g" PKGBUILD
   # find . -maxdepth 1 ! -name PKGBUILD ! -name "." -exec rm -rf {} \;
+  # clean src
+  rm -rf src
   cd ../..
 }
 
