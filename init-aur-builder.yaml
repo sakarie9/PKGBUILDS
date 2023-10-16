@@ -10,3 +10,5 @@ global-settings:
   arch-filter: [x86_64]
 aur-package-names:
   - uuplugin-bin
+  - xivlauncher-cn-git
+  - osu-lazer-bin
