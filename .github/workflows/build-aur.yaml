@@ -13,6 +13,10 @@ on:
   #     - 'init-aur-patcher.sh'
   workflow_call:
   workflow_dispatch:
+  workflow_run:
+    workflows: [build pkgbuild]
+    types:
+      - completed
 
 jobs:
   build:

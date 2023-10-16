@@ -1,17 +1,17 @@
 name: build pkgbuild
 
 on:
-  # schedule:
-  #   - cron:  '00 22 * * *'
-  # push:
-  #   branches:
-  #     - main
-  #   paths-ignore:
-  #     - 'aur-patches/**'
-  #     - '.github/workflows/build-aur.yaml'
-  #     - 'init-aur-builder.yaml'
-  #     - 'init-aur-patcher.sh'
-  #     - 'README.md'
+  schedule:
+    - cron:  '00 22 * * *'
+  push:
+    branches:
+      - main
+    # paths-ignore:
+    #   - 'aur-patches/**'
+    #   - '.github/workflows/build-aur.yaml'
+    #   - 'init-aur-builder.yaml'
+    #   - 'init-aur-patcher.sh'
+    #   - 'README.md'
   workflow_call:
   workflow_dispatch:
     inputs:
