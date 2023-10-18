@@ -47,11 +47,12 @@ depends+=(libdisplay-info.so)
 makedepends=(cmake
   gdb
   git
+  jq
   meson
   ninja
+  pkgconf
   vulkan-headers
-  xorgproto
-  jq)
+  xorgproto)
 provides=("hyprland=${pkgver%%.r*}")
 conflicts=(hyprland)
 source=("git+https://github.com/hyprwm/Hyprland.git"
@@ -78,9 +79,8 @@ prepare() {
   export CFLAGS="${CFLAGS/-Wp,-D_GLIBCXX_ASSERTIONS/} -O3 -flto -march=x86-64-v3"
   export CXXFLAGS="${CXXFLAGS/-Wp,-D_GLIBCXX_ASSERTIONS/} -O3 -flto -march=x86-64-v3"
 
-  pushd subprojects/wlroots
-  patch -p1 <../packagefiles/wlroots-meson-build.patch
-  popd
+  git -C subprojects/wlroots reset --hard
+  patch -d subprojects/wlroots -Np1 < subprojects/packagefiles/wlroots-meson-build.patch
 }
 
 # pkgver() {
