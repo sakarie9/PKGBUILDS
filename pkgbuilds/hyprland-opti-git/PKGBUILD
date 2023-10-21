@@ -31,8 +31,6 @@ depends=(cairo
   polkit
   seatd
   systemd-libs
-  vulkan-icd-loader
-  vulkan-validation-layers
   wayland
   wayland-protocols
   xcb-proto
@@ -51,7 +49,6 @@ makedepends=(cmake
   meson
   ninja
   pkgconf
-  vulkan-headers
   xorgproto)
 provides=("hyprland=${pkgver%%.r*}")
 conflicts=(hyprland)
@@ -117,19 +114,17 @@ build() {
 package() {
   cd Hyprland
 
-  meson install -C build --destdir "$pkgdir"
+  meson install -C build \
+    --destdir "$pkgdir" \
+    --skip-subprojects hyprland-protocols
 
   rm -rf "$pkgdir/usr/include/hyprland/wlroots/wlr"
   ln -sf . "$pkgdir/usr/include/hyprland/wlroots/wlr"
   # resolve conflicts with system wlr
   rm -f "$pkgdir/usr/lib/libwlroots.so"
-  rm -f "$pkgdir/usr/lib/pkgconfig/wlroots.pc"
-  # resolve conflicts with xdg-desktop-portal-hyprland from repo
+  rm -rf "$pkgdir/usr/lib/pkgconfig"
+  # FIXME: remove after xdg-desktop-portal-hyprland disowns hyprland-portals.conf
   rm -rf "$pkgdir/usr/share/xdg-desktop-portal"
-  rm -rf "$pkgdir/usr/share/hyprland-protocols/protocols"
-  rm -rf "$pkgdir/usr/share/pkgconfig/hyprland-protocols.pc"
-  # FIXME: meson.build shall install version.h
-  install -Dm0644 -t "$pkgdir/usr/include/hyprland/src" src/version.h
 
   # license
   install -Dm0644 -t "$pkgdir/usr/share/licenses/${pkgname}" LICENSE
