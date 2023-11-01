@@ -3,7 +3,7 @@ global-settings:
   repository: arch-repo/release/sakari-aur.db.tar.gz
   dereference-database-symlinks: true
   clean-after-build: true
-  packager: 'Sakari <sk308269317@outlook.com>'
+  packager: "Sakari <sk308269317@outlook.com>"
   check: enabled
   allow-failure: true
   install-missing-dependencies: true
@@ -14,3 +14,4 @@ members:
   - directory: hyprland-opti-git
   - directory: waybar-cava-git
   - directory: cava-git
+  - directory: spotify-player-full-git
