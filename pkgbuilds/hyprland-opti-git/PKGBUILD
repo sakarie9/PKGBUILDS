@@ -50,6 +50,7 @@ makedepends=(cmake
   ninja
   patch
   pkgconf
+  tomlplusplus
   xorgproto)
 provides=("hyprland=${pkgver%%.r*}")
 conflicts=(hyprland)
@@ -78,7 +79,7 @@ prepare() {
   export CXXFLAGS="${CXXFLAGS/-Wp,-D_GLIBCXX_ASSERTIONS/} -O3 -flto -march=x86-64-v3"
 
   git -C subprojects/wlroots reset --hard
-  patch -d subprojects/wlroots -Np1 < subprojects/packagefiles/wlroots-meson-build.patch
+  patch -d subprojects/wlroots -Np1 <subprojects/packagefiles/wlroots-meson-build.patch
 }
 
 # pkgver() {
@@ -98,15 +99,15 @@ build() {
   cd Hyprland
 
   meson setup build \
-    --prefix     /usr \
+    --prefix /usr \
     --libexecdir lib \
-    --sbindir    bin \
-    --buildtype  release \
-    --wrap-mode  nodownload \
-    -D           b_lto=true \
-    -D           b_pie=true \
-    -D           default_library=shared \
-    -D           xwayland=enabled
+    --sbindir bin \
+    --buildtype release \
+    --wrap-mode nodownload \
+    -D b_lto=true \
+    -D b_pie=true \
+    -D default_library=shared \
+    -D xwayland=enabled
 
   ln -sf wlroots build/subprojects/wlroots/include/wlr
   meson compile -C build
