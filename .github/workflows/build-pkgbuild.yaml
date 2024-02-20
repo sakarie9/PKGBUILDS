@@ -45,9 +45,8 @@ jobs:
 
       - name: Clone releases
         run: |
-          mkdir arch-repo/release
-          # ./git-clone-releases.sh sakarie9/arch-repo arch-repo/release
-          # cp -r arch-repo/release arch-repo/release-old
+          ./git-clone-releases.sh sakarie9/arch-repo arch-repo/release
+          cp -r arch-repo/release arch-repo/release-old
 
       - name: If rebuild requested
         if: "${{ github.event.inputs.pkgname != '' }}"
@@ -61,15 +60,15 @@ jobs:
         uses: sakarie9/pacman-repo-builder-action@0.0.0-rc.64.1
         with:
           command: |
-            #(
-              # echo ''
-              # echo '[sakari-aur]'
-              # echo 'SigLevel = Optional'
-              # echo 'Server = https://github.com/sakarie9/arch-repo/releases/download/repo'
+            (
+              echo ''
+              echo '[sakari-aur]'
+              echo 'SigLevel = Optional'
+              echo 'Server = https://github.com/sakarie9/arch-repo/releases/download/repo'
               # echo ''
               # echo '[archlinuxcn]'
               # echo 'Server = https://mirrors.xtom.hk/archlinuxcn/$arch'
-            #) >> /etc/pacman.conf
+            ) >> /etc/pacman.conf
             # pacman-key --init
             # pacman -Sy --noconfirm archlinuxcn-keyring
             pacman -Sy

@@ -44,9 +44,8 @@ jobs:
 
       - name: Clone releases
         run: |
-          mkdir arch-repo/release
-          # ./git-clone-releases.sh sakarie9/arch-repo arch-repo/release
-          # cp -r arch-repo/release arch-repo/release-old
+          ./git-clone-releases.sh sakarie9/arch-repo arch-repo/release
+          cp -r arch-repo/release arch-repo/release-old
 
       - name: Init AUR Builder
         uses: sakarie9/pacman-repo-builder-action@0.0.0-rc.64.1
