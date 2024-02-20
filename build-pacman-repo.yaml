@@ -10,8 +10,5 @@ global-settings:
   arch-filter: [x86_64]
 members:
   - directory: go-musicfox-git
-  - directory: hyprland-autoname-workspaces-git
   - directory: hyprland-opti-git
-  - directory: waybar-cava-git
-  - directory: cava-git
   - directory: sunshine-git
