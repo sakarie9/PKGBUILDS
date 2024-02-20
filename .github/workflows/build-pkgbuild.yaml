@@ -43,10 +43,10 @@ jobs:
           repository: sakarie9/arch-repo
           path: arch-repo/repo
 
-      - name: Clone releases
-        run: |
-          ./git-clone-releases.sh sakarie9/arch-repo arch-repo/release
-          cp -r arch-repo/release arch-repo/release-old
+      # - name: Clone releases
+      #   run: |
+      #     ./git-clone-releases.sh sakarie9/arch-repo arch-repo/release
+      #     cp -r arch-repo/release arch-repo/release-old
 
       - name: If rebuild requested
         if: "${{ github.event.inputs.pkgname != '' }}"
