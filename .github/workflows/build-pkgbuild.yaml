@@ -60,7 +60,7 @@ jobs:
         uses: sakarie9/pacman-repo-builder-action@0.0.0-rc.64.1
         with:
           command: |
-            (
+            #(
               # echo ''
               # echo '[sakari-aur]'
               # echo 'SigLevel = Optional'
@@ -68,7 +68,7 @@ jobs:
               # echo ''
               # echo '[archlinuxcn]'
               # echo 'Server = https://mirrors.xtom.hk/archlinuxcn/$arch'
-            ) >> /etc/pacman.conf
+            #) >> /etc/pacman.conf
             # pacman-key --init
             # pacman -Sy --noconfirm archlinuxcn-keyring
             pacman -Sy
