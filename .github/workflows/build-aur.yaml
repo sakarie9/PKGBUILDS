@@ -48,7 +48,7 @@ jobs:
           cp -r arch-repo/release arch-repo/release-old
 
       - name: Init AUR Builder
-        uses: pacman-repo-builder/action@0.0.0-rc.64
+        uses: sakarie9/pacman-repo-builder-action@0.0.0-rc.64.1
         with:
           command: |
             rm build-pacman-repo.yaml
@@ -70,7 +70,7 @@ jobs:
           sudo ./init-aur-patcher.sh
 
       - name: Build pacman packages
-        uses: pacman-repo-builder/action@0.0.0-rc.64
+        uses: sakarie9/pacman-repo-builder-action@0.0.0-rc.64.1
         with:
           command: |
             pacman -Sy
