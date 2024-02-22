@@ -3,7 +3,7 @@ global-settings:
   repository: arch-repo/release/sakari-aur.db.tar.gz
   dereference-database-symlinks: true
   clean-after-build: true
-  packager: "Sakari <sk308269317@outlook.com>"
+  packager: "Sakari <20642596+sakarie9@users.noreply.github.com>"
   check: enabled
   allow-failure: true
   install-missing-dependencies: true
