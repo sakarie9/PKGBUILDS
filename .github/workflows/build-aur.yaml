@@ -57,17 +57,17 @@ jobs:
             build-pacman-repo init-aur-builder
             cat build-pacman-repo.yaml
 
-      - name: Clone packages from official repo
-        run: |
-          sudo chmod +x init-aur-from-pkgctl.sh
-          sudo ./init-aur-from-pkgctl.sh
-          cat aur-repos.yaml | sudo tee -a build-pacman-repo.yaml
-          cat build-pacman-repo.yaml
+      # - name: Clone packages from official repo
+      #   run: |
+      #     sudo chmod +x init-aur-from-pkgctl.sh
+      #     sudo ./init-aur-from-pkgctl.sh
+      #     cat aur-repos.yaml | sudo tee -a build-pacman-repo.yaml
+      #     cat build-pacman-repo.yaml
 
-      - name: Patch packages
-        run: |
-          sudo chmod -R +x aur-patches
-          sudo ./init-aur-patcher.sh
+      # - name: Patch packages
+      #   run: |
+      #     sudo chmod -R +x aur-patches
+      #     sudo ./init-aur-patcher.sh
 
       - name: Build pacman packages
         uses: sakarie9/pacman-repo-builder-action@0.0.0-rc.64.1
