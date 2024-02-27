@@ -1,5 +1,7 @@
 #!/bin/bash
 
+pkgbuild_dir=$1
+
 process_pkgbuild() {
   cd $1
   # keep pkgrel for manual rebuild
@@ -14,7 +16,7 @@ process_pkgbuild() {
   cd ../..
 }
 
-for dir in $(find "pkgbuilds" -type d -name "*-git"); do
+for dir in $(find "$pkgbuild_dir" -type d -name "*-git"); do
   pkgbuild_file="$dir/PKGBUILD"
   if [ -f $pkgbuild_file ]; then
     echo $dir

@@ -72,7 +72,7 @@ jobs:
             # pacman-key --init
             # pacman -Sy --noconfirm archlinuxcn-keyring
             pacman -Sy
-            ./git-pkgver-update.sh
+            ./git-pkgver-update.sh pkgbuilds
             build-pacman-repo build
 
       - name: Cleanup packages

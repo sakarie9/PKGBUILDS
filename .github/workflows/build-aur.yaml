@@ -75,6 +75,7 @@ jobs:
           command: |
             pacman -Sy
             # import gpg keys
+            ./git-pkgver-update.sh aur-pkgbuilds
             build-pacman-repo build
 
       - name: Cleanup packages
