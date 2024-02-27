@@ -56,17 +56,14 @@ jobs:
             chmod -R 755 aur-pkgbuilds
             build-pacman-repo init-aur-builder
             cat build-pacman-repo.yaml
+            ./git-pkgver-update.sh aur-pkgbuilds
 
-      - name: Clone packages from official repo
-        run: |
-          sudo chmod +x init-aur-from-pkgctl.sh
-          sudo ./init-aur-from-pkgctl.sh
-          # cat aur-repos.yaml | sudo tee -a build-pacman-repo.yaml
-          cat build-pacman-repo.yaml
-
-      - name: Update AUR pkgver
-        run: |
-          ./git-pkgver-update.sh aur-pkgbuilds
+      # - name: Clone packages from official repo
+      #   run: |
+      #     sudo chmod +x init-aur-from-pkgctl.sh
+      #     sudo ./init-aur-from-pkgctl.sh
+      #     # cat aur-repos.yaml | sudo tee -a build-pacman-repo.yaml
+      #     cat build-pacman-repo.yaml
 
       - name: Patch packages
         run: |
@@ -78,7 +75,6 @@ jobs:
         with:
           command: |
             pacman -Sy
-            # import gpg keys
             build-pacman-repo build
 
       - name: Cleanup packages
