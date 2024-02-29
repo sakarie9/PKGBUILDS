@@ -31,6 +31,7 @@ jobs:
 
       - name: Download releases
         uses: robinraju/release-downloader@v1.9
+        continue-on-error: true
         with:
           repository: sakarie9/arch-repo
           tag: "repo"
