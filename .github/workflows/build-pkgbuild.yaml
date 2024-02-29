@@ -29,10 +29,15 @@ jobs:
           repository: sakarie9/arch-repo
           path: arch-repo/repo
 
-      - name: Clone releases
-        run: |
-          ./git-clone-releases.sh sakarie9/arch-repo arch-repo/release
-          cp -r arch-repo/release arch-repo/release-old
+      - name: Download releases
+        uses: robinraju/release-downloader@v1.9
+        with:
+          repository: sakarie9/arch-repo
+          tag: "repo"
+          fileName: "*"
+          out-file-path: "arch-repo/release"
+          tarBall: false
+          zipBall: false
 
       - name: If rebuild requested
         if: "${{ github.event.inputs.pkgname != '' }}"
@@ -41,6 +46,11 @@ jobs:
 
       - name: Build packages
         uses: sakarie9/arch-repo-builder@v0.2
+
+      # - name: Clone releases
+      #   run: |
+      #     ./git-clone-releases.sh sakarie9/arch-repo arch-repo/release
+      #     cp -r arch-repo/release arch-repo/release-old
 
       # - name: Generate changelog
       #   run: |
