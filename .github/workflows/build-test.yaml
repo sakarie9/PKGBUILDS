@@ -1,0 +1,14 @@
+name: test build
+
+on:
+  workflow_dispatch:
+
+jobs:
+  build-test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Build packages
+        uses: sakarie9/arch-repo-builder@main

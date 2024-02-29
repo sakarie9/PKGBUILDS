@@ -1,0 +1,77 @@
+pkgname=sunshine-git
+pkgver=r2006.593e170
+pkgrel=1
+pkgdesc="A self-hosted GameStream host for Moonlight."
+arch=('x86_64' 'aarch64')
+url=https://app.lizardbyte.dev
+license=('GPL3')
+install=sunshine.install
+
+depends=('avahi'
+  'boost-libs'
+  'curl'
+  'libayatana-appindicator'
+  'libevdev'
+  'libmfx'
+  'libnotify'
+  'libpulse'
+  'libva'
+  'libvdpau'
+  'libx11'
+  'libxcb'
+  'libxfixes'
+  'libxrandr'
+  'libxtst'
+  'miniupnpc'
+  'numactl'
+  'openssl'
+  'opus'
+  'udev')
+makedepends=('boost'
+  'cmake'
+  'git'
+  'make'
+  'nodejs'
+  'npm')
+optdepends=('cuda: NvFBC capture support'
+  'libcap'
+  'libdrm')
+
+provides=()
+conflicts=('sunshine')
+
+source=("$pkgname::git+https://github.com/LizardByte/Sunshine.git#branch=nightly")
+sha256sums=('SKIP')
+
+pkgver() {
+  cd "$pkgname"
+  printf "r%s.%s" "$(git rev-list --count HEAD)" "$(git rev-parse --short=7 HEAD)"
+}
+
+prepare() {
+  cd "$pkgname"
+  git submodule update --recursive --init
+}
+
+build() {
+  export BRANCH="master"
+  export BUILD_VERSION="${pkgver}"
+  export COMMIT="$(git rev-parse HEAD)"
+
+  export CFLAGS="${CFLAGS/-Werror=format-security/}"
+  export CXXFLAGS="${CXXFLAGS/-Werror=format-security/}"
+
+  cmake \
+    -S "$pkgname" \
+    -B build \
+    -Wno-dev \
+    -D CMAKE_INSTALL_PREFIX=/usr \
+    -D SUNSHINE_EXECUTABLE_PATH=/usr/bin/sunshine \
+    -D SUNSHINE_ASSETS_DIR="share/sunshine"
+
+  make -C build
+}
+
+package() {
+  make -C build install DESTDIR="$pkgdir"
+}
