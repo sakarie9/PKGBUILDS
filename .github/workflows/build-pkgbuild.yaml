@@ -46,7 +46,7 @@ jobs:
           echo TODO
 
       - name: Build packages
-        uses: sakarie9/arch-repo-builder@v0.2
+        uses: sakarie9/arch-repo-builder@main
 
       # - name: Clone releases
       #   run: |
