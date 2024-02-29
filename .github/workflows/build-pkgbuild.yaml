@@ -1,0 +1,106 @@
+name: build packages
+
+on:
+  schedule:
+    - cron:  '00 22 * * *'
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Get current time
+        uses: josStorer/get-current-time@v2.0.2
+        id: current-time
+        with:
+          format: "YYYY-MM-DD HH:mm:ss"
+          utcOffset: "+08:00"
+
+      - name: Clone target repository
+        uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.REPO_TOKEN }}
+          repository: sakarie9/arch-repo
+          path: arch-repo/repo
+
+      - name: Clone releases
+        run: |
+          ./git-clone-releases.sh sakarie9/arch-repo arch-repo/release
+          cp -r arch-repo/release arch-repo/release-old
+
+      - name: If rebuild requested
+        if: "${{ github.event.inputs.pkgname != '' }}"
+        run: |
+          echo TODO
+
+      - name: Build packages
+        uses: sakarie9/arch-repo-builder@v0.2
+
+      # - name: Generate changelog
+      #   run: |
+      #     CHANGELOG_PATH=arch-repo/repo/CHANGELOG
+      #     TMP_PATH=arch-repo/repo/CHANGELOG_tmp
+      #     DIFF=$(diff -u <(ls arch-repo/release-old) <(ls arch-repo/release) | grep -E "^\+|^-" | tail -n +4)
+      #     if [ -n "$DIFF" ]; then
+      #       touch $CHANGELOG_PATH
+      #       touch $TMP_PATH
+      #       echo '' > $TMP_PATH
+      #       date -d "+8 hours" +%F' '%T >> $TMP_PATH
+      #       diff -u <(ls arch-repo/release-old) <(ls arch-repo/release) | grep -E "^\+|^-" | tail -n +4 >> $TMP_PATH
+      #       cat $CHANGELOG_PATH >> $TMP_PATH
+      #       mv $TMP_PATH $CHANGELOG_PATH
+      #     fi
+
+      - name: Upload repo
+        env:
+          COMMIT_AUTHOR_NAME: ${{ secrets.COMMIT_AUTHOR_NAME }}
+          COMMIT_AUTHOR_EMAIL: ${{ secrets.COMMIT_AUTHOR_EMAIL }}
+        run: |
+          cd arch-repo/repo
+          git config --global user.name "$COMMIT_AUTHOR_NAME"
+          git config --global user.email "$COMMIT_AUTHOR_EMAIL"
+
+          # Normal commit
+          git add -vA
+          git diff-index --quiet HEAD || git commit -m "Update by $GITHUB_REPOSITORY@$GITHUB_SHA"
+          # tag
+          if [ $(git tag -l repo) ]; then
+            git tag -d repo
+          fi
+          git tag repo
+          # push
+          git pull origin main --rebase=true # to avoid conflicts due to data races
+          git push origin main
+
+      - name: Delete old release assets
+        uses: mknejp/delete-release-assets@v1
+        with:
+          token: ${{ secrets.REPO_TOKEN }}
+          tag: repo
+          repository: sakarie9/arch-repo
+          fail-if-no-release: false
+          fail-if-no-assets: false
+          assets: |
+            *.db
+            *.files
+            *.gz
+            *.zst
+
+      - name: Upload binaries to release
+        uses: svenstaro/upload-release-action@v2
+        with:
+          repo_name: sakarie9/arch-repo
+          repo_token: ${{ secrets.REPO_TOKEN }}
+          file: arch-repo/release/*
+          tag: repo
+          overwrite: true
+          file_glob: true
+          #prerelease: true
+          #release_name: ${{ steps.current-time.outputs.formattedTime }}
+          release_name: arch-repo

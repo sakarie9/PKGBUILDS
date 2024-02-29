@@ -1,0 +1,16 @@
+global-settings:
+  repository: arch-repo/release/sakari-aur.db.tar.gz
+  packager: "Sakari <20642596+sakarie9@users.noreply.github.com>"
+
+pkgbuilds:
+  container: pkgbuilds
+
+aurs:
+  container: aurs
+  packages:
+    - uuplugin-bin
+    - lib32-faudio # xivlauncher-cn-git
+    - xivlauncher-cn-git
+    - osu-mime # osu-lazer-bin
+    - osu-lazer-bin
+    - xdg-desktop-portal-hyprland-git
