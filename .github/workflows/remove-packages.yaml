@@ -1,0 +1,57 @@
+name: remove package
+on:
+  workflow_dispatch:
+    inputs:
+      pkgname:
+        description: 'Pkgnames needs to be removed, multiple packages should be split by space'
+        required: true
+
+jobs:
+  remove:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.REPO_TOKEN }}
+
+      - name: Download releases
+        uses: robinraju/release-downloader@v1.9
+        continue-on-error: true
+        with:
+          repository: sakarie9/arch-repo
+          tag: "repo"
+          fileName: "*"
+          out-file-path: "arch-repo/release"
+          tarBall: false
+          zipBall: false
+
+      - name: Remove package
+        run: |
+          for pkg in ${{ github.event.inputs.pkgname }}; do
+            ./package-remove.sh sakari-aur arch-repo/release $pkg
+          done
+
+      - name: Delete old release assets
+        uses: mknejp/delete-release-assets@v1
+        with:
+          token: ${{ secrets.REPO_TOKEN }}
+          tag: repo
+          repository: sakarie9/arch-repo
+          fail-if-no-release: false
+          fail-if-no-assets: false
+          assets: |
+            *.db
+            *.files
+            *.gz
+            *.zst
+
+      - name: Upload binaries to release
+        uses: svenstaro/upload-release-action@v2
+        with:
+          repo_name: sakarie9/arch-repo
+          repo_token: ${{ secrets.REPO_TOKEN }}
+          file: arch-repo/release/*
+          tag: repo
+          overwrite: true
+          file_glob: true
+          release_name: arch-repo
