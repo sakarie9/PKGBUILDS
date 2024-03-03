@@ -56,6 +56,8 @@ makedepends=(cmake
 optdepends=('cmake: to build and install plugins using hyprpm'
             'cpio: to build and install plugins using hyprpm'
             'meson: to build and install plugins using hyprpm')
+provides=("hyprland=${pkgver}")
+conflicts=(hyprland)
 _archive="${_pkgname^}-$pkgver"
 source=("$_archive.tar.gz::$url/releases/download/v$pkgver/source-v$pkgver.tar.gz")
 sha256sums=('8e44c379794663accf928458b5e363ed248d56fc5f267e6b3759146fdf1229bb')
