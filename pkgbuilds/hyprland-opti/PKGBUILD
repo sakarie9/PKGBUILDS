@@ -6,7 +6,7 @@
 _pkgname=hyprland
 pkgname=hyprland-opti
 pkgver=0.36.0
-pkgrel=1
+pkgrel=2
 pkgdesc='a highly customizable dynamic tiling Wayland compositor'
 arch=(x86_64 aarch64)
 url="https://github.com/hyprwm/${_pkgname^}"
@@ -69,9 +69,9 @@ prepare() {
 }
 
 build() {
-        # optimize
-        export CFLAGS="$CFLAGS -O3 -flto -march=x86-64-v3"
-        export CXXFLAGS="$CXXFLAGS -O3 -flto -march=x86-64-v3"
+	# optimize
+	export CFLAGS="$CFLAGS -O3 -flto -march=x86-64-v3"
+	export CXXFLAGS="$CXXFLAGS -O3 -flto -march=x86-64-v3"
 	cd "$_archive"
 	make release
 }
