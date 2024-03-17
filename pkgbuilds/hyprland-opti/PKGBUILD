@@ -46,7 +46,8 @@ depends=(cairo # libcairo.so
   xcb-util-renderutil # libxcb-render-util.so
   xcb-util-wm         # libxcb-ewmh.so  libxcb-icccm.so
   xorg-xinput
-  xorg-xwayland)
+  xorg-xwayland
+  hyprcursor)
 makedepends=(cmake
   gdb
   meson
