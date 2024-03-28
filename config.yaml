@@ -9,9 +9,6 @@ aurs:
   container: aurs
   packages:
     - uuplugin-bin
-    - faudio  # xivlauncher-cn-git
-    - lib32-faudio # xivlauncher-cn-git
-    - xivlauncher-cn-git
     - osu-mime # osu-lazer-bin
     - osu-lazer-bin
     - grimblast-git

@@ -1,0 +1,55 @@
+# Maintainer: meanlint <meanlint@outlook.com>
+pkgname=xivlauncher-cn-git
+pkgver=1.0.7.0.r1.gca4a7d2
+pkgrel=1
+pkgdesc="Custom Launcher for Final Fantasy XIV Online CN"
+arch=('x86_64')
+url='https://github.com/ottercorp/XIVLauncher.Core'
+license=('GPL')
+depends=(
+  'aria2'
+  'sdl2'
+  'libsecret'
+  'desktop-file-utils'
+  'jxrlib'
+  'xdg-utils'
+)
+makedepends=('dotnet-sdk>=6' 'python-yaml' 'git')
+options=('!strip')
+provides=("xivlauncher=${pkgver}")
+conflicts=("xivlauncher")
+source=(
+  "XIVLauncher.Core::git+https://github.com/ottercorp/XIVLauncher.Core.git"
+  "512.png::https://raw.githubusercontent.com/ottercorp/XIVLauncher.Core/main/misc/linux_distrib/512.png"
+  "XIVLauncher.desktop"
+)
+sha512sums=(
+  'SKIP'
+  '0c33502cd915132151fa4b6c94899bf3f8806c2943469609cdda09365ff78be863215abd2741048d6c9a934a22dca0f8a8a2c67074c38abc6f67984c393859c4'
+  '6c9a1f783969f293c07f06d167ab830f77ddaffdd8ce1df5f4e736056bd7c10c169c8c2411499493fb39659ca10643590998fccdaf4978dacb671ecfa2872949'
+)
+
+pkgver() {
+  cd "XIVLauncher.Core"
+  git describe --long --tags --abbrev=7 | sed 's/\([^-]*-g\)/r\1/;s/-/./g'
+}
+
+prepare() {
+  cd "${srcdir}/XIVLauncher.Core"
+  git submodule update --init --recursive
+}
+
+build() {
+  mkdir -p "${srcdir}/build"
+  cd "${srcdir}/XIVLauncher.Core/src/XIVLauncher.Core/"
+  dotnet publish -r linux-x64 --sc -o "${srcdir}/build" --configuration Release -p:DefineConstants=WINE_XIV_ARCH_LINUX
+}
+
+package() {
+  install -d "${pkgdir}/usr/bin/"
+  install -d "${pkgdir}/opt/XIVLauncher/"
+  install -D -m644 "${srcdir}/XIVLauncher.desktop" "${pkgdir}/usr/share/applications/XIVLauncher.desktop"
+  install -D -m644 "${srcdir}/512.png" "${pkgdir}/usr/share/pixmaps/xivlauncher.png"
+  cp -r "${srcdir}/build/." "${pkgdir}/opt/XIVLauncher/"
+  ln -s /opt/XIVLauncher/XIVLauncher.Core "${pkgdir}/usr/bin/XIVLauncher.Core"
+}
