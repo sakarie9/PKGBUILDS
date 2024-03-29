@@ -47,6 +47,8 @@ jobs:
 
       - name: Build packages
         uses: sakarie9/arch-repo-builder@main
+        with:
+          working-directory: ${{ github.workspace }}
 
       # - name: Clone releases
       #   run: |
