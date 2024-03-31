@@ -31,7 +31,6 @@ depends=(
   opengl-driver
   pango
   pixman
-  polkit
   seatd
   systemd-libs
   tomlplusplus
