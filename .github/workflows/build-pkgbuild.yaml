@@ -56,7 +56,7 @@ jobs:
       - name: Build packages
         uses: sakarie9/arch-repo-builder@main
 
-      - name: Save Primes
+      - name: Save ccache
         id: cache-primes-save
         uses: actions/cache/save@v4
         with:
