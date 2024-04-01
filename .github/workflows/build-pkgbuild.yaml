@@ -45,8 +45,24 @@ jobs:
         run: |
           echo TODO
 
+      - name: Restore ccache
+        id: cache-ccache-restore
+        uses: actions/cache/restore@v4
+        with:
+          path: |
+            ~/.cache/ccache
+          key: ${{ runner.os }}-ccache
+
       - name: Build packages
         uses: sakarie9/arch-repo-builder@main
+
+      - name: Save Primes
+        id: cache-primes-save
+        uses: actions/cache/save@v4
+        with:
+          path: |
+            ~/.cache/ccache
+          key: ${{ steps.cache-ccache-restore.outputs.cache-primary-key }}
 
       # - name: Clone releases
       #   run: |
