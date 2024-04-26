@@ -8,7 +8,7 @@ pkgrel=1
 pkgdesc="A dynamic tiling Wayland compositor based on wlroots that doesn't sacrifice on its looks."
 arch=(x86_64)
 url="https://github.com/hyprwm/Hyprland"
-license=(BSD)
+license=('BSD-3-Clause')
 depends=(
   cairo
   gcc-libs
@@ -50,11 +50,11 @@ makedepends=(
   cmake
   gdb
   git
-  jq
   meson
   ninja
   pkgconf
   xorgproto
+  hyprwayland-scanner
 )
 provides=("hyprland=${pkgver%%.r*}")
 conflicts=(hyprland)
@@ -69,30 +69,15 @@ b2sums=('SKIP'
   'SKIP'
   'SKIP')
 
-pick_mr() {
-  git pull origin pull/$1/head --no-edit
-}
-
 prepare() {
   cd Hyprland
+  rm -rf subprojects/{wlroots-hyprland,hyprland-protocols}
   git submodule init
-  git config submodule.subprojects/wlroots-hyprland.url "$srcdir/wlroots-hyprland"
-  git config submodule.subprojects/hyprland-protocols.url "$srcdir/hyprland-protocols"
-  git config submodule.subprojects/udis86.url "$srcdir/udis86"
-  git config submodule.subprojects/tracy.url "$srcdir/tracy"
+  git config submodule.subprojects/wlroots-hyprland.url "${srcdir}/wlroots-hyprland"
+  git config submodule.subprojects/hyprland-protocols.url "${srcdir}/hyprland-protocols"
+  git config submodule.subprojects/udis86.url "${srcdir}/udis86"
+  git config submodule.subprojects/tracy.url "${srcdir}/tracy"
   git -c protocol.file.allow=always submodule update
-
-  # optimize
-  export CFLAGS="${CFLAGS/-Wp,-D_GLIBCXX_ASSERTIONS/} -O3 -flto -march=x86-64-v3"
-  export CXXFLAGS="${CXXFLAGS/-Wp,-D_GLIBCXX_ASSERTIONS/} -O3 -flto -march=x86-64-v3"
-
-  if [[ -z "$(git config --get user.name)" ]]; then
-    git config user.name local && git config user.email '<>' && git config commit.gpgsign false
-  fi
-  # Pick pull requests from github using `pick_mr <pull request number>`.
-
-  git -C subprojects/wlroots-hyprland reset --hard
-  sed -E -i -e "s/(soversion = .*$)/soversion = 13032/g" subprojects/wlroots-hyprland/meson.build
 }
 
 pkgver() {
@@ -100,39 +85,52 @@ pkgver() {
 }
 
 build() {
+  # optimize
+  export CFLAGS="${CFLAGS/-Wp,-D_GLIBCXX_ASSERTIONS/} -O3 -flto -march=x86-64-v3"
+  export CXXFLAGS="${CXXFLAGS/-Wp,-D_GLIBCXX_ASSERTIONS/} -O3 -flto -march=x86-64-v3"
+
   cd Hyprland
-
-  meson setup build \
-    --prefix /usr \
-    --libexecdir lib \
-    --sbindir bin \
-    --buildtype release \
-    --wrap-mode nodownload \
-    -D b_lto=true \
-    -D b_pie=true \
-    -D default_library=shared \
-    -D xwayland=enabled \
-    -D systemd=enabled
-
-  meson compile -C build
+  mkdir -p build && cd build
+  cmake -G Ninja -DCMAKE_BUILD_TYPE=None -DCMAKE_SKIP_RPATH=ON -DCMAKE_INSTALL_PREFIX=/usr ..
+  ninja
 }
 
 package() {
   cd Hyprland
 
-  meson install -C build \
-    --destdir "$pkgdir" \
-    --skip-subprojects hyprland-protocols
-  mv "$pkgdir/usr/include/wlr" "$pkgdir/usr/include/hyprland/wlroots"
+  meson install -C subprojects/wlroots-hyprland/build --destdir "${pkgdir}/tmpwlr"
+  install -Dm755 build/Hyprland -t "${pkgdir}/usr/bin/"
 
-  # resolve conflicts with system wlr
-  rm -f "$pkgdir/usr/lib/libwlroots.so"
-  rm -rf "$pkgdir/usr/lib/pkgconfig"
+  pushd "${pkgdir}/usr/bin"
+  ln -sf Hyprland hyprland
+  popd
 
-  # FIXME: remove after xdg-desktop-portal-hyprland disowns hyprland-portals.conf
+  install -Dm755 build/{hyprctl/hyprctl,hyprpm/hyprpm} -t "${pkgdir}/usr/bin/"
+  install -Dm644 assets/*.png -t "${pkgdir}/usr/share/hyprland/"
 
-  rm -rf "$pkgdir/usr/share/xdg-desktop-portal"
+  install -Dm644 example/hyprland.desktop -t "${pkgdir}/usr/share/wayland-sessions"
+  install -Dm644 example/hyprland.conf -t "${pkgdir}/usr/share/hyprland"
 
-  # license
-  install -Dm0644 -t "$pkgdir/usr/share/licenses/${pkgname}" LICENSE
+  install -Dm644 LICENSE -t "${pkgdir}/usr/share/licenses/${pkgname}/"
+  install -Dm644 subprojects/wlroots-hyprland/LICENSE "${pkgdir}/usr/share/licenses/${pkgname}/LICENSE-wlroots"
+  install -Dm644 subprojects/udis86/LICENSE "${pkgdir}/usr/share/licenses/${pkgname}/LICENSE-udis86"
+
+  install -Dm644 docs/*.1 -t "${pkgdir}/usr/share/man/man1/"
+  install -Dm644 "${pkgdir}/tmpwlr/usr/local/lib/libwlroots.a" -t "${pkgdir}/usr/lib/"
+  install -d ${pkgdir}/usr/include/hyprland/{protocols,wlroots-hyprland}
+
+  for cmd in hyprctl hyprpm; do
+    install -Dm644 "${cmd}/${cmd}.bash" "${pkgdir}/usr/share/bash-completion/completions/${cmd}"
+    install -Dm644 "${cmd}/${cmd}.zsh" "${pkgdir}/usr/share/zsh/site-functions/_${cmd}"
+    install -Dm644 "${cmd}/${cmd}.fish" -t "${pkgdir}/usr/share/fish/vendor_completions.d/"
+  done
+
+  cp -R src "${pkgdir}/usr/include/hyprland/"
+  cp -R ${pkgdir}/tmpwlr/usr/local/include/* "${pkgdir}/usr/include/hyprland/wlroots-hyprland/"
+
+  find "${pkgdir}/usr/include/hyprland/" -type f ! -name '*.h*' -delete
+  rm -rf "${pkgdir}/tmpwlr/"
+
+  cp protocols/*.h* "${pkgdir}/usr/include/hyprland/protocols/"
+  install -Dm644 build/hyprland.pc -t "${pkgdir}/usr/share/pkgconfig/"
 }
