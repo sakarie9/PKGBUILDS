@@ -13,3 +13,5 @@ aurs:
     - osu-lazer-bin
     - grimblast-git
     - waylyrics
+    - wlroots-git
+    - sway-git
