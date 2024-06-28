@@ -2,7 +2,7 @@ name: build packages
 
 on:
   schedule:
-    - cron:  '0 8,20 * * *'
+    - cron: "0 8,20 * * *"
   push:
     branches:
       - main
@@ -19,7 +19,7 @@ jobs:
         uses: josStorer/get-current-time@v2
         id: cache-date
         with:
-          format: "YYYYMMDD"
+          format: "YYYYMM"
           utcOffset: "+08:00"
 
       - name: Clone target repository
@@ -45,26 +45,16 @@ jobs:
         run: |
           echo TODO
 
-      - name: Restore ccache
+      - name: Ccache
         id: cache-ccache-restore
-        uses: actions/cache/restore@v4
+        uses: actions/cache@v4
         with:
           path: |
             ccache
           key: ccache-${{ steps.cache-date.outputs.formattedTime }}
-          restore-keys: |
-            ccache-
 
       - name: Build packages
         uses: sakarie9/arch-repo-builder@main
-
-      - name: Save ccache
-        id: cache-primes-save
-        uses: actions/cache/save@v4
-        with:
-          path: |
-            ccache
-          key: ccache-${{ steps.cache-date.outputs.formattedTime }}
 
       # - name: Clone releases
       #   run: |
