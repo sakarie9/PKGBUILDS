@@ -1,16 +1,18 @@
 pkgname=sunshine-git
-pkgver=r2006.593e170
+pkgver=1
 pkgrel=1
 pkgdesc="A self-hosted GameStream host for Moonlight."
 arch=('x86_64' 'aarch64')
 url=https://app.lizardbyte.dev
-license=('GPL3')
+license=('GPL-3.0-only')
 install=sunshine.install
 
 depends=('avahi'
   'boost-libs'
   'curl'
   'libayatana-appindicator'
+  'libcap'
+  'libdrm'
   'libevdev'
   'libmfx'
   'libnotify'
@@ -26,6 +28,7 @@ depends=('avahi'
   'numactl'
   'openssl'
   'opus'
+  'python'
   'udev')
 makedepends=('boost'
   'cmake'
@@ -33,14 +36,15 @@ makedepends=('boost'
   'make'
   'nodejs'
   'npm')
-optdepends=('cuda: NvFBC capture support'
-  'libcap'
-  'libdrm')
+optdepends=('cuda: Nvidia GPU encoding support'
+  'libva-mesa-driver: AMD GPU encoding support'
+  'intel-media-driver: Intel GPU encoding support'
+  'xorg-server-xvfb: Virtual X server for headless testing')
 
 provides=()
 conflicts=('sunshine')
 
-source=("$pkgname::git+https://github.com/LizardByte/Sunshine.git#branch=nightly")
+source=("$pkgname::git+https://github.com/LizardByte/Sunshine.git")
 sha256sums=('SKIP')
 
 pkgver() {
