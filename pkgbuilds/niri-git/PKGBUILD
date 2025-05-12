@@ -1,0 +1,84 @@
+# Maintainer: David Runge <dvzrv@archlinux.org>
+
+_pkgname=niri
+pkgname=$_pkgname-git
+pkgver=1
+conflicts=(niri)
+pkgrel=1
+pkgdesc="A scrollable-tiling Wayland compositor"
+arch=(x86_64)
+url="https://github.com/YaLTeR/niri"
+license=(GPL-3.0-or-later)
+depends=(
+  cairo
+  gcc-libs
+  glib2
+  glibc
+  libdisplay-info
+  libinput
+  libpipewire
+  libxkbcommon
+  mesa
+  pango
+  pixman
+  seatd
+  systemd-libs
+  xdg-desktop-portal-impl
+)
+makedepends=(
+  clang
+  rust
+  git
+)
+optdepends=(
+  'alacritty: a suggested GPU-accelerated terminal emulator'
+  'bash: for niri-session script'
+  'fuzzel: a suggested Wayland application launcher'
+  'mako: a suggested Wayland notification daemon'
+  'org.freedesktop.secrets: for apps to rely on secrets portal'
+  'swaybg: a suggested Wayland wallpaper tool'
+  'swaylock: a suggested Wayland screen locker'
+  'waybar: a suggested Wayland customizable desktop bar'
+  'xwayland-satellite: for running X11 apps in XWayland'
+  'xdg-desktop-portal-gtk: a suggested XDG desktop portal'
+  'xdg-desktop-portal-gnome: a XDG desktop portal required for screencasting'
+)
+# NOTE: linking issues with LTO enabled
+options=(!lto !debug)
+source=($_pkgname::git+${url}.git)
+b2sums=('SKIP')
+
+pkgver() {
+  cd $_pkgname
+  git describe --long --tags --abbrev=7 | sed 's/\([^-]*-g\)/r\1/;s/-/./g;s/^v//'
+}
+
+prepare() {
+  cd $_pkgname
+  export RUSTUP_TOOLCHAIN=stable
+  cargo fetch --locked --target "$(rustc -vV | sed -n 's/host: //p')"
+  # curl -L "https://github.com/YaLTeR/niri/pull/1440.patch" | patch -Np1
+}
+
+build() {
+  cd $_pkgname
+  export RUSTUP_TOOLCHAIN=stable
+  export CARGO_TARGET_DIR=target
+  cargo build --frozen --release --features default
+}
+
+check() {
+  cd $_pkgname
+  export RUSTUP_TOOLCHAIN=stable
+  export XDG_RUNTIME_DIR="$(mktemp -d)"
+  cargo test --all --exclude niri-visual-tests --frozen
+}
+
+package() {
+  cd $_pkgname
+  install -vDm 755 {target/release/$_pkgname,resources/$_pkgname-session} -t "$pkgdir/usr/bin/"
+  install -vDm 644 resources/$_pkgname{.service,-shutdown.target} -t "$pkgdir/usr/lib/systemd/user/"
+  install -vDm 644 resources/$_pkgname.desktop -t "$pkgdir/usr/share/wayland-sessions/"
+  install -vDm 644 resources/$_pkgname-portals.conf -t "$pkgdir/usr/share/xdg-desktop-portal/"
+  install -vDm 644 resources/default-config.kdl README.md -t "$pkgdir/usr/share/doc/$_pkgname/"
+}
