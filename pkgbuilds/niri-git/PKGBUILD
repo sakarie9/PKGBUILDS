@@ -1,14 +1,15 @@
 # Maintainer: David Runge <dvzrv@archlinux.org>
+# Maintainer: Caleb Maclennan <caleb@alerque.com>
 
 _pkgname=niri
 pkgname=$_pkgname-git
 pkgver=1
-conflicts=(niri)
-pkgrel=1
+pkgrel=2
 pkgdesc="A scrollable-tiling Wayland compositor"
 arch=(x86_64)
 url="https://github.com/YaLTeR/niri"
 license=(GPL-3.0-or-later)
+conflicts=(niri)
 depends=(
   cairo
   gcc-libs
@@ -27,8 +28,8 @@ depends=(
 )
 makedepends=(
   clang
-  rust
   git
+  rust
 )
 optdepends=(
   'alacritty: a suggested GPU-accelerated terminal emulator'
@@ -55,22 +56,25 @@ pkgver() {
 
 prepare() {
   cd $_pkgname
-  export RUSTUP_TOOLCHAIN=stable
   cargo fetch --locked --target "$(rustc -vV | sed -n 's/host: //p')"
   # curl -L "https://github.com/YaLTeR/niri/pull/1440.patch" | patch -Np1
 }
 
 build() {
   cd $_pkgname
-  export RUSTUP_TOOLCHAIN=stable
-  export CARGO_TARGET_DIR=target
   cargo build --frozen --release --features default
+
+  # generate shell completions
+  for shell in bash fish zsh; do
+    cargo run --frozen --release --bin niri -- \
+      completions "$shell" >"$shell-completions"
+  done
 }
 
 check() {
   cd $_pkgname
-  export RUSTUP_TOOLCHAIN=stable
   export XDG_RUNTIME_DIR="$(mktemp -d)"
+  export RAYON_NUM_THREADS=1 # required so we can build in environments with _many_ threads
   cargo test --all --exclude niri-visual-tests --frozen
 }
 
@@ -81,4 +85,8 @@ package() {
   install -vDm 644 resources/$_pkgname.desktop -t "$pkgdir/usr/share/wayland-sessions/"
   install -vDm 644 resources/$_pkgname-portals.conf -t "$pkgdir/usr/share/xdg-desktop-portal/"
   install -vDm 644 resources/default-config.kdl README.md -t "$pkgdir/usr/share/doc/$_pkgname/"
+  # shell auto-completions
+  install -vDm 644 bash-completions "$pkgdir/usr/share/bash-completion/completions/niri"
+  install -vDm 644 fish-completions "$pkgdir/usr/share/fish/vendor_completions.d/niri.fish"
+  install -vDm 644 zsh-completions "$pkgdir/usr/share/zsh/site-functions/_niri"
 }
