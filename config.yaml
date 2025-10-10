@@ -9,8 +9,8 @@ aurs:
   container: aurs
   packages:
     - uuplugin-bin
-    - osu-mime # osu-lazer-bin
-    - osu-lazer-bin
+    # - osu-mime # osu-lazer-bin
+    # - osu-lazer-bin
     - grimblast-git
     - pyprland
     - mihomo
