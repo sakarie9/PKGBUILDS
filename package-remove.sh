@@ -10,7 +10,7 @@ PACKAGE=$3 # example-package
 
 cd $REPO_DIR
 rm $1.db $1.files
-rm $3*
+rm -f $3*
 
 repackage() {
     mkdir temp
