@@ -4,12 +4,13 @@
 _pkgname=niri
 pkgname=$_pkgname-git
 pkgver=1
-pkgrel=2
+pkgrel=3
 pkgdesc="A scrollable-tiling Wayland compositor"
 arch=(x86_64)
 url="https://github.com/YaLTeR/niri"
 license=(GPL-3.0-or-later)
 conflicts=(niri)
+provides=(niri)
 depends=(
   cairo
   gcc-libs
