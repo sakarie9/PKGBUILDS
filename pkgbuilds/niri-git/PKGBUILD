@@ -4,7 +4,7 @@
 _pkgname=niri
 pkgname=$_pkgname-git
 pkgver=1
-pkgrel=3
+pkgrel=1
 pkgdesc="A scrollable-tiling Wayland compositor"
 arch=(x86_64)
 url="https://github.com/YaLTeR/niri"
@@ -45,10 +45,12 @@ optdepends=(
   'xdg-desktop-portal-gtk: a suggested XDG desktop portal'
   'xdg-desktop-portal-gnome: a XDG desktop portal required for screencasting'
 )
-# NOTE: linking issues with LTO enabled
-options=(!lto !debug)
-source=($_pkgname::git+${url}.git)
-b2sums=('SKIP')
+options=(!debug)
+source=(
+  $_pkgname::git+${url}.git
+  fix-gtk-popup.patch
+)
+b2sums=('SKIP' 'SKIP')
 
 pkgver() {
   cd $_pkgname
@@ -57,12 +59,15 @@ pkgver() {
 
 prepare() {
   cd $_pkgname
-  cargo fetch --locked --target "$(rustc -vV | sed -n 's/host: //p')"
+  cargo fetch --locked --target "$(rustc --print host-tuple)"
   # curl -L "https://github.com/YaLTeR/niri/pull/1440.patch" | patch -Np1
+  patch -Np1 < ../fix-gtk-popup.patch
 }
 
 build() {
   cd $_pkgname
+  export NIRI_BUILD_COMMIT=$(git rev-parse --short HEAD)
+  CFLAGS+=(' -ffat-lto-objects')
   cargo build --frozen --release --features default
 
   # generate shell completions
