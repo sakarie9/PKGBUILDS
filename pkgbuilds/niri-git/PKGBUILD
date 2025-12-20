@@ -46,11 +46,8 @@ optdepends=(
   'xdg-desktop-portal-gnome: a XDG desktop portal required for screencasting'
 )
 options=(!debug)
-source=(
-  $_pkgname::git+${url}.git
-  fix-gtk-popup.patch
-)
-b2sums=('SKIP' 'SKIP')
+source=($_pkgname::git+${url}.git)
+b2sums=('SKIP')
 
 pkgver() {
   cd $_pkgname
@@ -61,7 +58,6 @@ prepare() {
   cd $_pkgname
   cargo fetch --locked --target "$(rustc --print host-tuple)"
   # curl -L "https://github.com/YaLTeR/niri/pull/1440.patch" | patch -Np1
-  patch -Np1 < ../fix-gtk-popup.patch
 }
 
 build() {
