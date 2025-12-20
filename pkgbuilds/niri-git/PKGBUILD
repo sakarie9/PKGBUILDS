@@ -57,6 +57,7 @@ pkgver() {
 prepare() {
   cd $_pkgname
   cargo fetch --locked --target "$(rustc --print host-tuple)"
+  # curl -L "https://github.com/YaLTeR/niri/pull/1440.patch" | patch -Np1
 }
 
 build() {
